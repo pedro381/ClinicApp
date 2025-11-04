@@ -1030,11 +1030,6 @@ C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\
 C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\net8.0\compressed\927plkmk2o-tptq2av103.gz
 C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\net8.0\compressed\fv852almvh-lfu7j35m59.gz
 C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\net8.0\compressed\ga4tohpf6k-oyz0vx2fzb.gz
-C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\net8.0\compressed\caqjtfuwlt-pcj9vued06.gz
-C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\net8.0\compressed\x8etihqgd2-2mnhk5nl0o.gz
-C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\net8.0\compressed\kb90l4x90i-cii8c430as.gz
-C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\net8.0\compressed\nrce2f7bjz-cv8107z4x2.gz
-C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\net8.0\compressed\0kih5qk3hm-tud7phtdaf.gz
 C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\net8.0\staticwebassets.build.json.cache
 C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\net8.0\staticwebassets.development.json
@@ -2090,3 +2085,9 @@ C:\Users\jonat\Downloads\MyClinicApp_corrigido\MyClinicApp\Client\obj\Debug\net8
 C:\Users\jonat\Downloads\MyClinicApp_corrigido\MyClinicApp\Client\obj\Debug\net8.0\refint\Client.dll
 C:\Users\jonat\Downloads\MyClinicApp_corrigido\MyClinicApp\Client\obj\Debug\net8.0\Client.pdb
 C:\Users\jonat\Downloads\MyClinicApp_corrigido\MyClinicApp\Client\obj\Debug\net8.0\ref\Client.dll
+C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\net8.0\compressed\caqjtfuwlt-9lgz2n3ax0.gz
+C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\net8.0\compressed\x8etihqgd2-25i2catkk8.gz
+C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\net8.0\compressed\kb90l4x90i-xlp7pnew3u.gz
+C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\net8.0\compressed\nrce2f7bjz-vzjo53b1pu.gz
+C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\net8.0\compressed\0kih5qk3hm-81tbt6r75m.gz

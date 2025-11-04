@@ -1,0 +1,40 @@
+﻿@page "/login"
+@using Client.Services
+@inject AuthService AuthService
+@inject NavigationManager Nav
+@inject IJSRuntime JS
+
+<h3>Login</h3>
+
+<input @bind="username" placeholder="Usuário" />
+<br />
+<input @bind="password" type="password" placeholder="Senha" />
+<br />
+<button @onclick="DoLogin">Entrar</button>
+
+<p>@message</p>
+
+@code {
+    string username = "";
+    string password = "";
+    string message = "";
+
+    async Task DoLogin()
+
+    {
+        var token = await AuthService.Login(new Shared.DTOs.Auth.LoginRequest
+        {
+            UserName = username,
+            Password = password
+        });
+
+        if (token == null)
+        {
+            message = "Credenciais inválidas";
+            return;
+        }
+
+        await JS.InvokeVoidAsync("localStorage.setItem", "authToken", token);
+        Nav.NavigateTo("/");
+    }
+}
