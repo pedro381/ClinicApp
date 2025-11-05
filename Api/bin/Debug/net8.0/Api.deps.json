@@ -76,6 +76,18 @@
         }
       },
       "Microsoft.AspNetCore.Components.Analyzers/8.0.21": {},
+      "Microsoft.AspNetCore.Components.Authorization/8.0.21": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Authorization": "8.0.21",
+          "Microsoft.AspNetCore.Components": "8.0.21"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.Components.Authorization.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.2125.47515"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Components.Forms/8.0.21": {
         "dependencies": {
           "Microsoft.AspNetCore.Components": "8.0.21"
@@ -968,6 +980,7 @@
       "System.Threading.Channels/6.0.0": {},
       "Client/1.0.0": {
         "dependencies": {
+          "Microsoft.AspNetCore.Components.Authorization": "8.0.21",
           "Microsoft.AspNetCore.Components.WebAssembly": "8.0.21",
           "Shared": "1.0.0"
         },
@@ -1058,6 +1071,13 @@
       "sha512": "sha512-rYzZWBgSBCtJSsqZTrXtSUY+vhJTRCL4+5fLZayPrXQjphQUUOpIyDT1hp3b8q5ytWwP0lUMCZH7lSBQ8C5tTw==",
       "path": "microsoft.aspnetcore.components.analyzers/8.0.21",
       "hashPath": "microsoft.aspnetcore.components.analyzers.8.0.21.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Components.Authorization/8.0.21": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-V/HfY3NRK5rfEMNMHlrFuCHDGwnJwuPnNzhxxHaRk5mDLLXEApmDOagHLLdds1FW/HF6lDE7otI6Ggdk6p/XXA==",
+      "path": "microsoft.aspnetcore.components.authorization/8.0.21",
+      "hashPath": "microsoft.aspnetcore.components.authorization.8.0.21.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Components.Forms/8.0.21": {
       "type": "package",

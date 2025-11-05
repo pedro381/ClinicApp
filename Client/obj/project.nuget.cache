@@ -1,12 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "IufVp6goKMg=",
+  "dgSpecHash": "6E6TZ+G+d4s=",
   "success": true,
-  "projectFilePath": "C:\\Users\\jonat\\OneDrive\\Área de Trabalho\\Projetos\\MyClinicApp\\Client\\Client.csproj",
+  "projectFilePath": "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Client\\Client.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\jonat\\.nuget\\packages\\intersoft.crosslight\\6.0.5000.975\\intersoft.crosslight.6.0.5000.975.nupkg.sha512",
     "C:\\Users\\jonat\\.nuget\\packages\\microsoft.aspnetcore.authorization\\8.0.21\\microsoft.aspnetcore.authorization.8.0.21.nupkg.sha512",
     "C:\\Users\\jonat\\.nuget\\packages\\microsoft.aspnetcore.components\\8.0.21\\microsoft.aspnetcore.components.8.0.21.nupkg.sha512",
     "C:\\Users\\jonat\\.nuget\\packages\\microsoft.aspnetcore.components.analyzers\\8.0.21\\microsoft.aspnetcore.components.analyzers.8.0.21.nupkg.sha512",
+    "C:\\Users\\jonat\\.nuget\\packages\\microsoft.aspnetcore.components.authorization\\8.0.21\\microsoft.aspnetcore.components.authorization.8.0.21.nupkg.sha512",
     "C:\\Users\\jonat\\.nuget\\packages\\microsoft.aspnetcore.components.forms\\8.0.21\\microsoft.aspnetcore.components.forms.8.0.21.nupkg.sha512",
     "C:\\Users\\jonat\\.nuget\\packages\\microsoft.aspnetcore.components.web\\8.0.21\\microsoft.aspnetcore.components.web.8.0.21.nupkg.sha512",
     "C:\\Users\\jonat\\.nuget\\packages\\microsoft.aspnetcore.components.webassembly\\8.0.21\\microsoft.aspnetcore.components.webassembly.8.0.21.nupkg.sha512",
@@ -33,5 +35,18 @@
     "C:\\Users\\jonat\\.nuget\\packages\\system.io.pipelines\\8.0.0\\system.io.pipelines.8.0.0.nupkg.sha512",
     "C:\\Users\\jonat\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\8.0.21\\microsoft.netcore.app.runtime.mono.browser-wasm.8.0.21.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "O pacote 'Intersoft.Crosslight 6.0.5000.975' foi restaurado usando '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' em vez da estrutura de destino do projeto 'net8.0'. Esse pacote pode não ser totalmente compatível com o seu projeto.",
+      "projectPath": "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Client\\Client.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Client\\Client.csproj",
+      "libraryId": "Intersoft.Crosslight",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

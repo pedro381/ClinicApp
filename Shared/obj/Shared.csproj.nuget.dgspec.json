@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jonat\\OneDrive\\Área de Trabalho\\Projetos\\MyClinicApp\\Shared\\Shared.csproj": {}
+    "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Shared\\Shared.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jonat\\OneDrive\\Área de Trabalho\\Projetos\\MyClinicApp\\Shared\\Shared.csproj": {
+    "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Shared\\Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jonat\\OneDrive\\Área de Trabalho\\Projetos\\MyClinicApp\\Shared\\Shared.csproj",
+        "projectUniqueName": "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Shared\\Shared.csproj",
         "projectName": "Shared",
-        "projectPath": "C:\\Users\\jonat\\OneDrive\\Área de Trabalho\\Projetos\\MyClinicApp\\Shared\\Shared.csproj",
+        "projectPath": "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Shared\\Shared.csproj",
         "packagesPath": "C:\\Users\\jonat\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jonat\\OneDrive\\Área de Trabalho\\Projetos\\MyClinicApp\\Shared\\obj\\",
+        "outputPath": "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Shared\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

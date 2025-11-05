@@ -1,8 +1,12 @@
 ﻿@page "/login"
 @using Client.Services
+@using Microsoft.AspNetCore.Authorization
+
+
 @inject AuthService AuthService
 @inject NavigationManager Nav
 @inject IJSRuntime JS
+
 
 <h3>Login</h3>
 
@@ -20,7 +24,6 @@
     string message = "";
 
     async Task DoLogin()
-
     {
         var token = await AuthService.Login(new Shared.DTOs.Auth.LoginRequest
         {
@@ -34,7 +37,6 @@
             return;
         }
 
-        await JS.InvokeVoidAsync("localStorage.setItem", "authToken", token);
         Nav.NavigateTo("/");
     }
 }

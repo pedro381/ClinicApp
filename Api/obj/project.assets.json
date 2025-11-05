@@ -28,6 +28,15 @@
           }
         }
       },
+      "Intersoft.Crosslight/6.0.5000.975": {
+        "type": "package",
+        "compile": {
+          "lib/Intersoft.Crosslight.dll": {}
+        },
+        "runtime": {
+          "lib/Intersoft.Crosslight.dll": {}
+        }
+      },
       "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.6": {
         "type": "package",
         "dependencies": {
@@ -86,6 +95,23 @@
         "type": "package",
         "build": {
           "buildTransitive/netstandard2.0/Microsoft.AspNetCore.Components.Analyzers.targets": {}
+        }
+      },
+      "Microsoft.AspNetCore.Components.Authorization/8.0.21": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Authorization": "8.0.21",
+          "Microsoft.AspNetCore.Components": "8.0.21"
+        },
+        "compile": {
+          "lib/net8.0/Microsoft.AspNetCore.Components.Authorization.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.Components.Authorization.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.AspNetCore.Components.Forms/8.0.21": {
@@ -1534,6 +1560,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "Intersoft.Crosslight": "6.0.5000.975",
+          "Microsoft.AspNetCore.Components.Authorization": "8.0.21",
           "Microsoft.AspNetCore.Components.WebAssembly": "8.0.21",
           "Shared": "1.0.0"
         },
@@ -1633,6 +1661,37 @@
         "logo.png"
       ]
     },
+    "Intersoft.Crosslight/6.0.5000.975": {
+      "sha512": "icRCEz9Fl9HI7LyiUniMnIN8TeI1vRI4QPZQyGDx3sTyX5YxDGNHE2uLXG3ShsI1EOSY4x/Vxycs/QTOL3uqnQ==",
+      "type": "package",
+      "path": "intersoft.crosslight/6.0.5000.975",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "intersoft.crosslight.6.0.5000.975.nupkg.sha512",
+        "intersoft.crosslight.nuspec",
+        "lib/Intersoft.Crosslight.dll",
+        "lib/MonoAndroid10/Intersoft.Crosslight.Android.dll",
+        "lib/MonoAndroid10/Intersoft.Crosslight.dll",
+        "lib/NetCore45/Intersoft.Crosslight.WinRT.dll",
+        "lib/NetCore45/Intersoft.Crosslight.WinRT/Controls/TabControl.xaml",
+        "lib/NetCore45/Intersoft.Crosslight.WinRT/Themes/DatePicker.xaml",
+        "lib/NetCore45/Intersoft.Crosslight.WinRT/Themes/Generic.xaml",
+        "lib/NetCore45/Intersoft.Crosslight.dll",
+        "lib/Xamarin.iOS10/Intersoft.Crosslight.dll",
+        "lib/Xamarin.iOS10/Intersoft.Crosslight.iOS.dll",
+        "lib/wp8/Intersoft.Crosslight.WinPhone.dll",
+        "lib/wp8/Intersoft.Crosslight.dll",
+        "tools/CocoaDialog.app.zip",
+        "tools/CocoaDialog.sh",
+        "tools/NugetUtil.dll",
+        "tools/dependencies.xml",
+        "tools/init.ps1",
+        "tools/install.log",
+        "tools/install.ps1"
+      ]
+    },
     "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.6": {
       "sha512": "devoUZd8YqikCheBVYpIyvp9psM2Y2ZhOvq1zL2YSjIoq3FUQH8LpLkGak+8oAi/5DGqX8KWyLpZJSUXtOAVCw==",
       "type": "package",
@@ -1696,6 +1755,21 @@
         "buildTransitive/netstandard2.0/Microsoft.AspNetCore.Components.Analyzers.targets",
         "microsoft.aspnetcore.components.analyzers.8.0.21.nupkg.sha512",
         "microsoft.aspnetcore.components.analyzers.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.Components.Authorization/8.0.21": {
+      "sha512": "V/HfY3NRK5rfEMNMHlrFuCHDGwnJwuPnNzhxxHaRk5mDLLXEApmDOagHLLdds1FW/HF6lDE7otI6Ggdk6p/XXA==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.components.authorization/8.0.21",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.txt",
+        "lib/net8.0/Microsoft.AspNetCore.Components.Authorization.dll",
+        "lib/net8.0/Microsoft.AspNetCore.Components.Authorization.xml",
+        "microsoft.aspnetcore.components.authorization.8.0.21.nupkg.sha512",
+        "microsoft.aspnetcore.components.authorization.nuspec"
       ]
     },
     "Microsoft.AspNetCore.Components.Forms/8.0.21": {
@@ -4069,11 +4143,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jonat\\OneDrive\\Área de Trabalho\\Projetos\\MyClinicApp\\Api\\Api.csproj",
+      "projectUniqueName": "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Api\\Api.csproj",
       "projectName": "Api",
-      "projectPath": "C:\\Users\\jonat\\OneDrive\\Área de Trabalho\\Projetos\\MyClinicApp\\Api\\Api.csproj",
+      "projectPath": "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Api\\Api.csproj",
       "packagesPath": "C:\\Users\\jonat\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jonat\\OneDrive\\Área de Trabalho\\Projetos\\MyClinicApp\\Api\\obj\\",
+      "outputPath": "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -4094,17 +4168,17 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\jonat\\OneDrive\\Área de Trabalho\\Projetos\\MyClinicApp\\Client\\Client.csproj": {
-              "projectPath": "C:\\Users\\jonat\\OneDrive\\Área de Trabalho\\Projetos\\MyClinicApp\\Client\\Client.csproj"
+            "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Client\\Client.csproj": {
+              "projectPath": "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Client\\Client.csproj"
             },
-            "C:\\Users\\jonat\\OneDrive\\Área de Trabalho\\Projetos\\MyClinicApp\\Core\\Core.csproj": {
-              "projectPath": "C:\\Users\\jonat\\OneDrive\\Área de Trabalho\\Projetos\\MyClinicApp\\Core\\Core.csproj"
+            "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Core\\Core.csproj": {
+              "projectPath": "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Core\\Core.csproj"
             },
-            "C:\\Users\\jonat\\OneDrive\\Área de Trabalho\\Projetos\\MyClinicApp\\Infrastructure\\Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\jonat\\OneDrive\\Área de Trabalho\\Projetos\\MyClinicApp\\Infrastructure\\Infrastructure.csproj"
+            "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Infrastructure\\Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Infrastructure\\Infrastructure.csproj"
             },
-            "C:\\Users\\jonat\\OneDrive\\Área de Trabalho\\Projetos\\MyClinicApp\\Shared\\Shared.csproj": {
-              "projectPath": "C:\\Users\\jonat\\OneDrive\\Área de Trabalho\\Projetos\\MyClinicApp\\Shared\\Shared.csproj"
+            "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Shared\\Shared.csproj": {
+              "projectPath": "C:\\Users\\jonat\\OneDrive\\Documentos\\GitHub\\ClinicApp\\Shared\\Shared.csproj"
             }
           }
         }
@@ -4174,5 +4248,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "O pacote 'Intersoft.Crosslight 6.0.5000.975' foi restaurado usando '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' em vez da estrutura de destino do projeto 'net8.0'. Esse pacote pode não ser totalmente compatível com o seu projeto.",
+      "libraryId": "Intersoft.Crosslight",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

@@ -1,0 +1,11 @@
+﻿@page "/clinicas"
+@using Client.SharedClient
+@using Microsoft.AspNetCore.Authorization
+
+
+@attribute [Authorize(Roles = "Master")]
+@layout MasterLayout
+
+<h3>Gerenciar Clínicas</h3>
+
+<p>Somente MASTER vê isso.</p>

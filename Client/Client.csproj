@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Intersoft.Crosslight" Version="6.0.5000.975" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.21" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.21" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.21" PrivateAssets="all" />
   </ItemGroup>

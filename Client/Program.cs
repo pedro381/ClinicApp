@@ -17,7 +17,9 @@ builder.Services.AddScoped<AuthService>();
 
 await builder.Build().RunAsync();*/
 using Client;
+using Client.Auth;
 using Client.Services;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -35,6 +37,10 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseU
 // --- FIM DO AJUSTE ---
 
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddAuthorizationCore();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+
+
 
 await builder.Build().RunAsync();
 

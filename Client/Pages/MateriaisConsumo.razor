@@ -1,0 +1,10 @@
+﻿@page "/materiais-consumo"
+@using Client.SharedClient
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Auxiliar")]
+
+@layout AuxLayout
+
+<h3>Registrar Consumo de Materiais</h3>
+
+<p>Somente AUXILIAR vê isso.</p>
