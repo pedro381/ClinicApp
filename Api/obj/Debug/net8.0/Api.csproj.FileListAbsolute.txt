@@ -627,3 +627,4 @@ C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Api\obj\Debug\net8.0\Api.pdb
 C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Api\obj\Debug\net8.0\Api.genruntimeconfig.cache
 C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Api\obj\Debug\net8.0\ref\Api.dll
 C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Api\bin\Debug\net8.0\Microsoft.AspNetCore.Components.Authorization.dll
+C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Api\bin\Debug\net8.0\Intersoft.Crosslight.dll

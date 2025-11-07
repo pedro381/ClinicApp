@@ -54,5 +54,12 @@ namespace Client.Auth
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
 
+        public async Task LogoutAsync()
+        {
+            await _js.InvokeVoidAsync("localStorage.removeItem", "authToken");
+            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+        }
+
+
     }
 }

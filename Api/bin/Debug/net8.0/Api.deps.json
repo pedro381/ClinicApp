@@ -39,6 +39,14 @@
           }
         }
       },
+      "Intersoft.Crosslight/6.0.5000.975": {
+        "runtime": {
+          "lib/Intersoft.Crosslight.dll": {
+            "assemblyVersion": "6.0.5000.1",
+            "fileVersion": "6.0.5000.975"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.6": {
         "dependencies": {
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "7.1.2"
@@ -980,6 +988,7 @@
       "System.Threading.Channels/6.0.0": {},
       "Client/1.0.0": {
         "dependencies": {
+          "Intersoft.Crosslight": "6.0.5000.975",
           "Microsoft.AspNetCore.Components.Authorization": "8.0.21",
           "Microsoft.AspNetCore.Components.WebAssembly": "8.0.21",
           "Shared": "1.0.0"
@@ -1043,6 +1052,13 @@
       "sha512": "sha512-lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw==",
       "path": "humanizer.core/2.14.1",
       "hashPath": "humanizer.core.2.14.1.nupkg.sha512"
+    },
+    "Intersoft.Crosslight/6.0.5000.975": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-icRCEz9Fl9HI7LyiUniMnIN8TeI1vRI4QPZQyGDx3sTyX5YxDGNHE2uLXG3ShsI1EOSY4x/Vxycs/QTOL3uqnQ==",
+      "path": "intersoft.crosslight/6.0.5000.975",
+      "hashPath": "intersoft.crosslight.6.0.5000.975.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.6": {
       "type": "package",

@@ -3141,6 +3141,11 @@ C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\bin\Debug\net8.0\wwwr
 C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\bin\Debug\net8.0\Microsoft.AspNetCore.Components.Authorization.dll
 C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\webcil\Microsoft.AspNetCore.Components.Authorization.wasm
 C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\compressed\2ocqzejo36-azrhdxs7ba.gz
-C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\compressed\kb90l4x90i-f79b4kycfq.gz
-C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\compressed\nrce2f7bjz-6dz7uq0kde.gz
-C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\compressed\0kih5qk3hm-eids4o12yn.gz
+C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\bin\Debug\net8.0\wwwroot\_framework\Intersoft.Crosslight.wasm
+C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\bin\Debug\net8.0\wwwroot\_framework\Intersoft.Crosslight.wasm.gz
+C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\bin\Debug\net8.0\Intersoft.Crosslight.dll
+C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\webcil\Intersoft.Crosslight.wasm
+C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\compressed\9p19sabryo-zpdw6g8n23.gz
+C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\compressed\kb90l4x90i-5t3ad3g8jw.gz
+C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\compressed\nrce2f7bjz-ydtdg22zdv.gz
+C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\compressed\0kih5qk3hm-2nps8h5ckf.gz

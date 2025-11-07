@@ -7,3 +7,4 @@ C:\Users\jonat\OneDrive\Área de Trabalho\Projetos\MyClinicApp\Client\obj\Debug\
 C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\staticwebassets.build.json
