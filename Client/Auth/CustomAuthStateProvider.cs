@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -16,50 +17,79 @@ namespace Client.Auth
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var token = await _js.InvokeAsync<string>("localStorage.getItem", "authToken");
-
-            if (string.IsNullOrEmpty(token))
+            try
             {
-                // Usuário NÃO autenticado
+                var token = await _js.InvokeAsync<string>("localStorage.getItem", "authToken");
+
+                if (string.IsNullOrWhiteSpace(token))
+                    return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+
+                var claims = ParseClaimsFromJwt(token);
+                var user = new ClaimsPrincipal(new ClaimsIdentity(claims, "jwt"));
+
+                return new AuthenticationState(user);
+            }
+            catch
+            {
+                // ⚠️ Evita loops infinitos caso algo dê errado no carregamento do estado
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
+        }
 
-            // Decodifica o JWT (simples)
+        // 🔹 Notifica autenticação (login)
+        public void NotifyUserAuthentication(string token)
+        {
             var claims = ParseClaimsFromJwt(token);
-
-            var identity = new ClaimsIdentity(claims, "jwt");
-            var user = new ClaimsPrincipal(identity);
-
-            return new AuthenticationState(user);
+            var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(claims, "jwt"));
+            var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
+            NotifyAuthenticationStateChanged(authState);
         }
 
-        private IEnumerable<Claim> ParseClaimsFromJwt(string token)
-        {
-            var payload = token.Split('.')[1];
-            var json = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(PadBase64(payload)));
-
-            var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
-            return keyValuePairs.Select(k => new Claim(k.Key, k.Value.ToString()));
-        }
-
-        private string PadBase64(string base64)
-        {
-            if (base64.Length % 4 == 2) return base64 + "==";
-            if (base64.Length % 4 == 3) return base64 + "=";
-            return base64;
-        }
-
-        public void NotifyUserAuthentication()
-        {
-            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
-        }
-
+        // 🔹 Notifica logout
         public async Task LogoutAsync()
         {
             await _js.InvokeVoidAsync("localStorage.removeItem", "authToken");
-            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+            var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
+            var authState = Task.FromResult(new AuthenticationState(anonymousUser));
+            NotifyAuthenticationStateChanged(authState);
         }
 
+        // 🔹 Decodifica o JWT sem depender de libs externas
+        private IEnumerable<Claim> ParseClaimsFromJwt(string token)
+        {
+            var payload = token.Split('.')[1];
+            var jsonBytes = ParseBase64WithoutPadding(payload);
+            var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
 
+            var claims = new List<Claim>();
+            if (keyValuePairs != null)
+            {
+                foreach (var kvp in keyValuePairs)
+                {
+                    if (kvp.Value is JsonElement element && element.ValueKind == JsonValueKind.Array)
+                    {
+                        foreach (var item in element.EnumerateArray())
+                            claims.Add(new Claim(kvp.Key, item.GetString() ?? ""));
+                    }
+                    else
+                    {
+                        claims.Add(new Claim(kvp.Key, kvp.Value?.ToString() ?? ""));
+                    }
+                }
+            }
+
+            return claims;
+        }
+
+        private byte[] ParseBase64WithoutPadding(string base64)
+        {
+            switch (base64.Length % 4)
+            {
+                case 2: base64 += "=="; break;
+                case 3: base64 += "="; break;
+            }
+
+            return Convert.FromBase64String(base64);
+        }
     }
 }

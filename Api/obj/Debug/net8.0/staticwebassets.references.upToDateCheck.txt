@@ -8,3 +8,11 @@ C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\stat
 C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\jonat\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\login\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\login\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\login\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\login\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\login\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\login\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\login\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\login\OneDrive\Documentos\GitHub\ClinicApp\Client\obj\Debug\net8.0\staticwebassets.build.json

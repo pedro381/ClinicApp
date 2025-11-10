@@ -12,7 +12,6 @@ namespace Client.Services
         private readonly IJSRuntime _js;
         private readonly AuthenticationStateProvider _authStateProvider;
 
-
         public AuthService(HttpClient http, IJSRuntime js, AuthenticationStateProvider authStateProvider)
         {
             _http = http;
@@ -30,20 +29,21 @@ namespace Client.Services
             var response = await result.Content.ReadFromJsonAsync<LoginResponse>();
             if (response is null) return null;
 
-            // Salva o token no LocalStorage
+            // 🔹 Salva o token no LocalStorage
             await _js.InvokeVoidAsync("localStorage.setItem", "authToken", response.Token);
 
-            // Atualiza o estado de autenticação no Blazor
-            (_authStateProvider as CustomAuthStateProvider)?.NotifyUserAuthentication();
-
+            // 🔹 Atualiza o estado de autenticação no Blazor
+            (_authStateProvider as CustomAuthStateProvider)?
+                .NotifyUserAuthentication(response.Token);
 
             return response.Token;
-
         }
 
         public async Task Logout()
         {
             await _js.InvokeVoidAsync("localStorage.removeItem", "authToken");
+            if (_authStateProvider is CustomAuthStateProvider customProvider)
+                await customProvider.LogoutAsync();
         }
 
         public async Task<string?> GetToken()

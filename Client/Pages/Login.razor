@@ -1,42 +1,90 @@
 ﻿@page "/login"
 @using Client.Services
 @using Microsoft.AspNetCore.Authorization
-
-
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Text.Json
 @inject AuthService AuthService
 @inject NavigationManager Nav
 @inject IJSRuntime JS
-
+@inject AuthenticationStateProvider AuthStateProvider
 
 <h3>Login</h3>
 
-<input @bind="username" placeholder="Usuário" />
-<br />
-<input @bind="password" type="password" placeholder="Senha" />
-<br />
-<button @onclick="DoLogin">Entrar</button>
+<div style="max-width:300px; margin:auto;">
+    <input @bind="username" class="form-control mb-2" placeholder="Usuário" />
+    <input @bind="password" type="password" class="form-control mb-2" placeholder="Senha" />
+    <button class="btn btn-primary w-100" @onclick="DoLogin">Entrar</button>
 
-<p>@message</p>
+    <p class="text-danger mt-2">@message</p>
+</div>
 
 @code {
-    string username = "";
-    string password = "";
-    string message = "";
+    private string username = "";
+    private string password = "";
+    private string message = "";
 
-    async Task DoLogin()
+    private async Task DoLogin()
     {
-        var token = await AuthService.Login(new Shared.DTOs.Auth.LoginRequest
+        try
         {
-            UserName = username,
-            Password = password
-        });
+            var token = await AuthService.Login(new Shared.DTOs.Auth.LoginRequest
+            {
+                UserName = username,
+                Password = password
+            });
 
-        if (token == null)
-        {
-            message = "Credenciais inválidas";
-            return;
+            if (string.IsNullOrEmpty(token))
+            {
+                message = "Credenciais inválidas";
+                return;
+            }
+
+            // 🔹 1. Salva o token no localStorage
+            await JS.InvokeVoidAsync("localStorage.setItem", "authToken", token);
+
+            // 🔹 2. Notifica o provedor de autenticação
+            (AuthStateProvider as Client.Auth.CustomAuthStateProvider)?
+                .NotifyUserAuthentication(token);
+
+            // 🔹 3. Lê o role do token para redirecionar
+            var role = GetRoleFromJwt(token);
+
+            // 🔹 4. Redireciona conforme o tipo de usuário
+            if (role == "Master")
+                Nav.NavigateTo("/clinicas", true);
+            else
+                Nav.NavigateTo("/materiaisconsumo", true);
         }
+        catch (Exception ex)
+        {
+            message = $"Erro ao tentar logar: {ex.Message}";
+        }
+    }
 
-        Nav.NavigateTo("/");
+    // Método simples para extrair o "role" do token
+    private string GetRoleFromJwt(string token)
+    {
+        try
+        {
+            var payload = token.Split('.')[1];
+            var json = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(PadBase64(payload)));
+            var data = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
+
+            if (data != null && data.TryGetValue("role", out var role))
+                return role?.ToString() ?? "";
+
+            return "";
+        }
+        catch
+        {
+            return "";
+        }
+    }
+
+    private string PadBase64(string base64)
+    {
+        if (base64.Length % 4 == 2) base64 += "==";
+        else if (base64.Length % 4 == 3) base64 += "=";
+        return base64;
     }
 }

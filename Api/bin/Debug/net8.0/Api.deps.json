@@ -991,7 +991,8 @@
           "Intersoft.Crosslight": "6.0.5000.975",
           "Microsoft.AspNetCore.Components.Authorization": "8.0.21",
           "Microsoft.AspNetCore.Components.WebAssembly": "8.0.21",
-          "Shared": "1.0.0"
+          "Shared": "1.0.0",
+          "System.IdentityModel.Tokens.Jwt": "7.6.0"
         },
         "runtime": {
           "Client.dll": {
