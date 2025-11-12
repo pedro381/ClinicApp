@@ -1,6 +1,6 @@
 [
   {
-    "Name": "Novo Perfil",
+    "Name": "Web + API",
     "Projects": [
       {
         "Path": "Api\\Api.csproj",
