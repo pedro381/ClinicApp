@@ -1,10 +1,9 @@
 ﻿using System.Net.Http.Json;
 using Shared.DTOs;
 
-public class MaterialService
+public class MaterialService(HttpClient http)
 {
-    private readonly HttpClient _http;
-    public MaterialService(HttpClient http) => _http = http;
+    private readonly HttpClient _http = http;
 
     public Task<List<MaterialDto>> GetAll() => _http.GetFromJsonAsync<List<MaterialDto>>("materials")!;
     public async Task<MaterialDto?> Create(MaterialCreateRequest request)

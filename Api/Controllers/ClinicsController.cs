@@ -9,10 +9,9 @@ using System.Security.Claims;
 
 [ApiController]
 [Route("clinics")]
-public class ClinicsController : ControllerBase
+public class ClinicsController(AppDbContext db) : ControllerBase
 {
-    private readonly AppDbContext _db;
-    public ClinicsController(AppDbContext db) => _db = db;
+    private readonly AppDbContext _db = db;
 
     [HttpGet]
     public async Task<IActionResult> GetAll()

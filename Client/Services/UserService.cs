@@ -3,14 +3,9 @@ using Shared.DTOs;
 
 namespace Client.Services
 {
-    public class UserService
+    public class UserService(HttpClient http)
     {
-        private readonly HttpClient _http;
-
-        public UserService(HttpClient http)
-        {
-            _http = http;
-        }
+        private readonly HttpClient _http = http;
 
         public Task<List<UserDto>> GetAll() =>
             _http.GetFromJsonAsync<List<UserDto>>("api/users")!;

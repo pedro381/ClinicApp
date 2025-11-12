@@ -1,23 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.Json;
 
 namespace Client.Auth
 {
-    public class CustomAuthStateProvider : AuthenticationStateProvider
+    public class CustomAuthStateProvider(IJSRuntime _js) : AuthenticationStateProvider
     {
-        private readonly IJSRuntime _js;
-        private AuthenticationState _cachedState;
-        private bool _isInitialized = false;
-
-        public CustomAuthStateProvider(IJSRuntime js)
-        {
-            _js = js;
-            // Inicializa com estado anônimo imediatamente
-            _cachedState = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
-        }
+        private AuthenticationState _cachedState = new(new ClaimsPrincipal(new ClaimsIdentity()));
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
@@ -75,7 +65,7 @@ namespace Client.Auth
         }
 
         // 🔹 Decodifica o JWT sem depender de libs externas
-        private IEnumerable<Claim> ParseClaimsFromJwt(string token)
+        private static List<Claim> ParseClaimsFromJwt(string token)
         {
             var payload = token.Split('.')[1];
             var jsonBytes = ParseBase64WithoutPadding(payload);
@@ -111,7 +101,7 @@ namespace Client.Auth
             return claims;
         }
 
-        private byte[] ParseBase64WithoutPadding(string base64)
+        private static byte[] ParseBase64WithoutPadding(string base64)
         {
             switch (base64.Length % 4)
             {

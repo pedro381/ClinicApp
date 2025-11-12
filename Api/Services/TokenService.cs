@@ -1,24 +1,18 @@
-﻿    using Core.Entities;
-    using Microsoft.IdentityModel.Tokens;
-    using System.IdentityModel.Tokens.Jwt;
-    using System.Security.Claims;
-    using System.Text;
-    using Microsoft.IdentityModel.JsonWebTokens;
+﻿using Core.Entities;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 
 
-    namespace Api.Services
+namespace Api.Services
     {
-        public class TokenService
-        {
-            private readonly IConfiguration _config;
+        public class TokenService(IConfiguration config)
+    {
+            private readonly IConfiguration _config = config;
 
-            public TokenService(IConfiguration config)
-            {
-                _config = config;
-            }
-
-            public string GenerateToken(User user)
+        public string GenerateToken(User user)
             {
                 var jwtKey = _config["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key não configurada");
                 var key = Encoding.ASCII.GetBytes(jwtKey);

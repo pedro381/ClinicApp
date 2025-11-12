@@ -9,14 +9,9 @@ using Shared.DTOs;
 [ApiController]
 [Route("api/users")]
 [Authorize(Roles = "Master")]
-public class UsersController : ControllerBase
+public class UsersController(AppDbContext db) : ControllerBase
 {
-    private readonly AppDbContext _db;
-
-    public UsersController(AppDbContext db)
-    {
-        _db = db;
-    }
+    private readonly AppDbContext _db = db;
 
     [HttpGet]
     public async Task<IActionResult> GetAll()

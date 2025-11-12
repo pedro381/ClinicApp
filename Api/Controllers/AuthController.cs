@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Shared.DTOs.Auth;
 using Infrastructure.Dat;
-using BCrypt.Net;
 using Api.Services;
 using Microsoft.AspNetCore.Authorization;
 
@@ -10,16 +9,10 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("api/auth")]
-    public class AuthController : ControllerBase
+    public class AuthController(AppDbContext db, TokenService tokenService) : ControllerBase
     {
-        private readonly AppDbContext _db;
-        private readonly TokenService _tokenService;
-
-        public AuthController(AppDbContext db, TokenService tokenService)
-        {
-            _db = db;
-            _tokenService = tokenService;
-        }
+        private readonly AppDbContext _db = db;
+        private readonly TokenService _tokenService = tokenService;
 
         [HttpPost("login")]
         [AllowAnonymous]

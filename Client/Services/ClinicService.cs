@@ -1,10 +1,9 @@
 ﻿using System.Net.Http.Json;
 using Shared.DTOs;
 
-public class ClinicService
+public class ClinicService(HttpClient http)
 {
-    private readonly HttpClient _http;
-    public ClinicService(HttpClient http) => _http = http;
+    private readonly HttpClient _http = http;
 
     public Task<List<ClinicDto>> GetAll() => _http.GetFromJsonAsync<List<ClinicDto>>("clinics")!;
     public Task<ClinicDetailDto?> Get(Guid id) => _http.GetFromJsonAsync<ClinicDetailDto>($"clinics/{id}");

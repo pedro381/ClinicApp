@@ -5,10 +5,9 @@ using Shared.DTOs;
 
 [ApiController]
 [Route("dashboard")]
-public class DashboardController : ControllerBase
+public class DashboardController(AppDbContext db) : ControllerBase
 {
-    private readonly AppDbContext _db;
-    public DashboardController(AppDbContext db) => _db = db;
+    private readonly AppDbContext _db = db;
 
     [HttpGet("summary")]
     public async Task<IActionResult> Summary()

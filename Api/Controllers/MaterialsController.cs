@@ -8,10 +8,9 @@ using Shared.DTOs;
 
 [ApiController]
 [Route("materials")]
-public class MaterialsController : ControllerBase
+public class MaterialsController(AppDbContext db) : ControllerBase
 {
-    private readonly AppDbContext _db;
-    public MaterialsController(AppDbContext db) => _db = db;
+    private readonly AppDbContext _db = db;
 
     // 🔹 GET /materials
     [HttpGet]

@@ -7,18 +7,11 @@ using System.Net.Http.Headers;
 
 namespace Client.Services
 {
-    public class AuthService
+    public class AuthService(HttpClient http, IJSRuntime js, AuthenticationStateProvider authStateProvider)
     {
-        private readonly HttpClient _http;
-        private readonly IJSRuntime _js;
-        private readonly AuthenticationStateProvider _authStateProvider;
-
-        public AuthService(HttpClient http, IJSRuntime js, AuthenticationStateProvider authStateProvider)
-        {
-            _http = http;
-            _js = js;
-            _authStateProvider = authStateProvider;
-        }
+        private readonly HttpClient _http = http;
+        private readonly IJSRuntime _js = js;
+        private readonly AuthenticationStateProvider _authStateProvider = authStateProvider;
 
         public async Task<string?> Login(LoginRequest request)
         {
