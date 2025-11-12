@@ -1,0 +1,62 @@
+﻿@page "/materiais/{Category}"
+@using Microsoft.AspNetCore.Authorization
+@using Shared.DTOs
+@attribute [Authorize(Roles = "Master")]
+@inject HttpClient Http
+@inject NavigationManager Nav
+
+<h3>Materiais - @Category</h3>
+
+<button class="btn btn-primary mb-3" @onclick="AddNew">+ Adicionar Material</button>
+
+@if (materials == null)
+{
+    <p>Carregando...</p>
+}
+else if (!materials.Any())
+{
+    <p>Nenhum material encontrado nesta categoria.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in materials)
+            {
+                <tr>
+                    <td>@m.Name</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" @onclick="() => Delete(m.Id)">Excluir</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter] public string Category { get; set; } = string.Empty;
+    private List<MaterialDto>? materials;
+
+    protected override async Task OnInitializedAsync()
+    {
+        materials = await Http.GetFromJsonAsync<List<MaterialDto>>($"/materials/by-category/{Category}");
+    }
+
+    void AddNew()
+    {
+        Nav.NavigateTo($"/materiais/{Category}/add");
+    }
+
+    async Task Delete(Guid id)
+    {
+        await Http.DeleteAsync($"api/materials/{id}");
+        materials = await Http.GetFromJsonAsync<List<MaterialDto>>($"/materials/by-category/{Category}");
+    }
+}

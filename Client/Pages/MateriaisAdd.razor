@@ -1,0 +1,37 @@
+﻿@* @page "/materiais/{Category}/add"
+@using Microsoft.AspNetCore.Authorization
+@using Shared.DTOs
+@attribute [Authorize(Roles = "Master")]
+@inject HttpClient Http
+@inject NavigationManager Nav
+
+<h3>Adicionar Material - @Category</h3>
+
+<div class="mb-3">
+    <label>Nome do Material</label>
+    <input class="form-control" @bind="Name" />
+</div>
+
+<button class="btn btn-success" @onclick="Create">Salvar</button>
+<button class="btn btn-secondary ms-2" @onclick="Cancel">Cancelar</button>
+
+@code {
+    [Parameter] public string Category { get; set; } = string.Empty;
+    private string Name = "";
+
+    async Task Create()
+    {
+        var dto = new MaterialDto(Guid.Empty, Name, Category);
+        var result = await Http.PostAsJsonAsync("/materials", dto);
+
+        if (result.IsSuccessStatusCode)
+        {
+            Nav.NavigateTo($"/materiais/{Category}");
+        }
+    }
+
+    void Cancel()
+    {
+        Nav.NavigateTo($"/materiais/{Category}");
+    }
+} *@

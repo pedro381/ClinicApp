@@ -1,0 +1,60 @@
+﻿@page "/materiais/{Category}/add"
+@inject HttpClient Http
+@inject NavigationManager Nav
+
+<h3>Adicionar Materiais - @Category</h3>
+
+@foreach (var item in Materials)
+{
+    <div class="mb-3 border p-3 rounded bg-light">
+        <label>Nome do Material</label>
+        <input class="form-control mb-2" @bind="item.Name" placeholder="Ex: Luva" />
+
+        <label>Quantidade</label>
+        <input type="number" class="form-control" @bind="item.Quantity" min="1" />
+    </div>
+}
+
+<button class="btn btn-outline-primary mb-3" @onclick="AddNewMaterial">+ Adicionar outro</button>
+
+<div>
+    <button class="btn btn-success" @onclick="SaveAll">Salvar Tudo</button>
+    <button class="btn btn-secondary ms-2" @onclick="@(() => Nav.NavigateTo($"/materiais/{Category}"))">Cancelar</button>
+</div>
+
+@code {
+    [Parameter] public string Category { get; set; } = string.Empty;
+
+    public class MaterialInput
+    {
+        public string Name { get; set; } = string.Empty;
+        public int Quantity { get; set; } = 1;
+    }
+
+    List<MaterialInput> Materials = new() { new MaterialInput() };
+
+    void AddNewMaterial()
+    {
+        Materials.Add(new MaterialInput());
+    }
+
+    async Task SaveAll()
+    {
+        var payload = new
+        {
+            Materials = Materials.Select(x => new
+            {
+                x.Name,
+                x.Quantity,
+                Category
+            })
+        };
+
+        var result = await Http.PostAsJsonAsync("api/materials/batch", payload);
+
+        if (result.IsSuccessStatusCode)
+        {
+            Nav.NavigateTo($"/materiais/{Category}");
+        }
+    }
+}

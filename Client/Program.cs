@@ -49,6 +49,16 @@ builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>
 // Habilita o componente CascadingAuthenticationState a receber o estado de autenticação
 // do provedor e distribuí-lo para o resto da aplicação.
 builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddScoped<DashboardService>();
+builder.Services.AddScoped<ClinicService>();
+builder.Services.AddScoped<MaterialService>();
+builder.Services.AddScoped<DashboardService>();
+builder.Services.AddScoped<ClinicService>();
+builder.Services.AddScoped<MaterialService>();
+builder.Services.AddAuthorizationCore();
+builder.Services.AddScoped<AuthenticationStateProvider, Client.Auth.CustomAuthStateProvider>();
+builder.Services.AddScoped<AuthService>();
+
 
 // --- Fim da Configuração de Autenticação ---
 

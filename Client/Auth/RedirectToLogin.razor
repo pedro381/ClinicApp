@@ -1,8 +1,23 @@
 ﻿@inject NavigationManager Nav
+@inject IJSRuntime JS
+@using Microsoft.JSInterop
 
 @code {
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        Nav.NavigateTo("/login");
+        var currentUrl = Nav.Uri;
+        // Só redireciona se não estiver já na página de login
+        if (!currentUrl.Contains("/login"))
+        {
+            // Aguarda um pouco e verifica se há token (pode estar em processo de autenticação)
+            await Task.Delay(300);
+            var token = await JS.InvokeAsync<string>("localStorage.getItem", "authToken");
+            
+            // Se não há token, redireciona para login
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                Nav.NavigateTo("/login", true);
+            }
+        }
     }
 }

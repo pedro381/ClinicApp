@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Shared.DTOs
+{
+    namespace Shared.DTOs
+    {
+        public record MaterialCreateRequest(string Name, string Category, int Quantity);
+    }
+
+}

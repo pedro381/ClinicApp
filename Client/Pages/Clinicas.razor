@@ -1,11 +1,81 @@
 ﻿@page "/clinicas"
-@using Client.SharedClient
 @using Microsoft.AspNetCore.Authorization
-
-
+@using Shared.DTOs
 @attribute [Authorize(Roles = "Master")]
-@layout MasterLayout
+@inject ClinicService ClinicService
+@inject DashboardService DashboardService
 
 <h3>Gerenciar Clínicas</h3>
 
-<p>Somente MASTER vê isso.</p>
+@if (clinics == null)
+{
+    <p>Carregando...</p>
+}
+else
+{
+    <div class="btn-group mb-3">
+        @foreach (var c in clinics)
+        {
+            <button class="btn btn-outline-primary" @onclick="() => SelectClinic(c)">@c.Name</button>
+        }
+    </div>
+
+    @if (selectedClinic != null)
+    {
+        <h4>Relatório: @selectedClinic.Name</h4>
+        <div>
+            <!-- chama API para detalhes -->
+            @if (clinicDetails == null)
+            {
+                <p>Carregando detalhes...</p>
+            }
+            else
+            {
+                <!-- exibe stocks e movimentos -->
+                <h5>Estoque</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Material</th>
+                            <th>Qtd</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var s in clinicDetails.Stocks)
+                        {
+                            <tr>
+                                <td>@s.MaterialName</td>
+                                <td>@s.QuantityAvailable</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <h5>Últimas Movimentações</h5>
+                <ul>
+                    @foreach (var m in clinicDetails.Movements)
+                    {
+                        <li>@m.CreatedAt.ToLocalTime(): @m.MovementType - @m.Quantity - por @m.PerformedBy</li>
+                    }
+                </ul>
+            }
+        </div>
+    }
+}
+
+@code {
+    List<ClinicDto>? clinics;
+    ClinicDto? selectedClinic;
+    dynamic? clinicDetails;
+
+    protected override async Task OnInitializedAsync()
+    {
+        clinics = await ClinicService.GetAll();
+    }
+
+    async Task SelectClinic(ClinicDto c)
+    {
+        selectedClinic = c;
+        clinicDetails = await ClinicService.Get(c.Id);
+    }
+}

@@ -1,0 +1,39 @@
+﻿@page "/dashboard"
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize(Roles = "Master")]
+@inject DashboardService DashboardService
+
+<h3>Dashboard Geral</h3>
+
+@if (summary == null)
+{
+    <p>Carregando...</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var c in summary.Clinics)
+        {
+            <div class="card m-2 p-2" style="width:220px;">
+                <h5>@c.ClinicName</h5>
+                <p>Materiais distintos: @c.DistinctMaterials</p>
+                <p>Total em estoque: @c.TotalQuantity</p>
+            </div>
+        }
+    </div>
+
+    <div class="mt-4">
+        <p>Total clínicas: @summary.TotalClinics</p>
+        <p>Total materiais distintos (soma): @summary.TotalMaterials</p>
+        <p>Total unidades em estoque: @summary.TotalQuantity</p>
+    </div>
+}
+
+@code {
+    Shared.DTOs.DashboardSummaryDto? summary;
+    protected override async Task OnInitializedAsync()
+    {
+        summary = await DashboardService.GetSummary();
+    }
+}
