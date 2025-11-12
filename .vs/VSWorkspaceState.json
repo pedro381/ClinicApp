@@ -1,9 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\Client",
-    "\\Client\\Pages"
+    ""
   ],
-  "SelectedNode": "\\Client\\Pages\\Home.razor",
+  "SelectedNode": "\\MyClinicApp.sln",
   "PreviewInSolutionExplorer": false
 }

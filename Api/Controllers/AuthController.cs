@@ -4,6 +4,7 @@ using Shared.DTOs.Auth;
 using Infrastructure.Dat;
 using BCrypt.Net;
 using Api.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Api.Controllers
 {
@@ -21,6 +22,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginRequest request)
         {
             var user = await _db.Users.FirstOrDefaultAsync(x => x.UserName == request.UserName);
