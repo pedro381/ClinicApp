@@ -26,4 +26,7 @@ public class ClinicService(HttpClient http)
 
     public Task<HttpResponseMessage> ConsumeMaterial(Guid clinicId, ClinicConsumeRequest request) =>
         _http.PostAsJsonAsync($"clinics/{clinicId}/consume", request);
+
+    public Task<HttpResponseMessage> ClearMovements(Guid clinicId) =>
+        _http.DeleteAsync($"clinics/{clinicId}/movements");
 }

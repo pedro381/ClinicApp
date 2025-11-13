@@ -23,6 +23,7 @@ public class ClinicsController(AppDbContext db) : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [Authorize(Roles = "User, Master")]
     public async Task<IActionResult> Get(Guid id)
     {
         var clinic = await _db.Clinics
@@ -33,6 +34,7 @@ public class ClinicsController(AppDbContext db) : ControllerBase
         if (clinic == null) return NotFound();
 
         var stocks = clinic.ClinicStocks
+            .Where(s => s.QuantityAvailable > 0)
             .OrderBy(s => s.Material.Name)
             .Select(s => new ClinicStockDto(
                 s.MaterialId,
@@ -44,6 +46,7 @@ public class ClinicsController(AppDbContext db) : ControllerBase
             .ToList();
 
         var movements = await _db.StockMovements
+            .Include(m => m.Material)
             .Where(m => m.ClinicId == id)
             .OrderByDescending(m => m.CreatedAt)
             .Take(50)
@@ -51,6 +54,7 @@ public class ClinicsController(AppDbContext db) : ControllerBase
                 m.Id,
                 m.ClinicId,
                 m.MaterialId,
+                m.Material.Name,
                 m.Quantity,
                 m.MovementType.ToString(),
                 m.PerformedByUser.UserName,
@@ -62,7 +66,7 @@ public class ClinicsController(AppDbContext db) : ControllerBase
     }
 
     [HttpPost("{clinicId:guid}/allocate")]
-    [Authorize(Roles = "Master")]
+    [Authorize(Roles = "User, Master")]
     public async Task<IActionResult> AllocateToClinic(Guid clinicId, [FromBody] ClinicAllocateRequest request)
     {
         if (request.Quantity <= 0)
@@ -126,7 +130,7 @@ public class ClinicsController(AppDbContext db) : ControllerBase
     }
 
     [HttpPost("{clinicId:guid}/stock/{materialId:guid}/open")]
-    [Authorize(Roles = "Master")]
+    [Authorize(Roles = "User, Master")]
     public async Task<IActionResult> SetClinicStockOpen(Guid clinicId, Guid materialId, [FromBody] ClinicStockOpenRequest request)
     {
         var clinicStock = await _db.ClinicStocks
@@ -136,8 +140,9 @@ public class ClinicsController(AppDbContext db) : ControllerBase
         if (clinicStock == null)
             return NotFound("Registro de estoque não encontrado.");
 
-        if (clinicStock.Material.Category != MaterialCategory.MateriaisDeUso)
-            return BadRequest("Apenas materiais de uso podem ser marcados como abertos.");
+        if (clinicStock.Material.Category != MaterialCategory.MateriaisDeUso && 
+            clinicStock.Material.Category != MaterialCategory.Descartaveis)
+            return BadRequest("Apenas materiais de uso e descartáveis podem ser marcados como abertos.");
 
         if (request.IsOpen && !clinicStock.IsOpen)
         {
@@ -254,5 +259,22 @@ public class ClinicsController(AppDbContext db) : ControllerBase
             Message = "Material consumido com sucesso.",
             RemainingQuantity = clinicStock.QuantityAvailable
         });
+    }
+
+    [HttpDelete("{clinicId:guid}/movements")]
+    [Authorize(Roles = "User, Master")]
+    public async Task<IActionResult> ClearMovements(Guid clinicId)
+    {
+        var clinic = await _db.Clinics.FindAsync(clinicId);
+        if (clinic == null) return NotFound("Clínica não encontrada.");
+
+        var movements = await _db.StockMovements
+            .Where(m => m.ClinicId == clinicId)
+            .ToListAsync();
+
+        _db.StockMovements.RemoveRange(movements);
+        await _db.SaveChangesAsync();
+
+        return Ok(new { Message = "Log de movimentações limpo com sucesso." });
     }
 }

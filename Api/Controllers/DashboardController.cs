@@ -30,19 +30,32 @@ public class DashboardController(AppDbContext db) : ControllerBase
     public async Task<IActionResult> ClinicDetails(Guid id)
     {
         var clinic = await _db.Clinics
-            .Where(c => c.Id == id)
-            .Select(c => new {
-                c.Id,
-                c.Name,
-                Stocks = c.ClinicStocks.Select(s => new ClinicStockDto(s.MaterialId, s.Material.Name, s.QuantityAvailable, s.Material.Category.ToString(), s.IsOpen, s.OpenedAt)),
-                RecentMovements = _db.StockMovements
-                    .Where(m => m.ClinicId == id)
-                    .OrderByDescending(m => m.CreatedAt)
-                    .Take(20)
-                    .Select(m => new StockMovementDto(m.Id, m.ClinicId, m.MaterialId, m.Quantity, m.MovementType.ToString(), m.PerformedByUser.UserName, m.CreatedAt, m.Note))
-            }).FirstOrDefaultAsync();
+            .Include(c => c.ClinicStocks)
+                .ThenInclude(s => s.Material)
+            .FirstOrDefaultAsync(c => c.Id == id);
 
         if (clinic == null) return NotFound();
-        return Ok(clinic);
+
+        var stocks = clinic.ClinicStocks
+            .Where(s => s.QuantityAvailable > 0)
+            .Select(s => new ClinicStockDto(s.MaterialId, s.Material.Name, s.QuantityAvailable, s.Material.Category.ToString(), s.IsOpen, s.OpenedAt))
+            .ToList();
+
+        var movements = await _db.StockMovements
+            .Include(m => m.Material)
+            .Include(m => m.PerformedByUser)
+            .Where(m => m.ClinicId == id)
+            .OrderByDescending(m => m.CreatedAt)
+            .Take(20)
+            .Select(m => new StockMovementDto(m.Id, m.ClinicId, m.MaterialId, m.Material.Name, m.Quantity, m.MovementType.ToString(), m.PerformedByUser.UserName, m.CreatedAt, m.Note))
+            .ToListAsync();
+
+        return Ok(new
+        {
+            clinic.Id,
+            clinic.Name,
+            Stocks = stocks,
+            RecentMovements = movements
+        });
     }
 }

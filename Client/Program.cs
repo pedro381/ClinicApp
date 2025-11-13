@@ -19,9 +19,11 @@ await builder.Build().RunAsync();*/
 using Client;
 using Client.Auth;
 using Client.Services;
+using Client.Utils;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.JSInterop;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -31,8 +33,13 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 string apiBaseUrl = builder.Configuration.GetValue<string>("ApiBaseUrl")
                     ?? throw new InvalidOperationException("ApiBaseUrl not found in configuration.");
 
-// Configura o HttpClient para usar a URL da API
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseUrl) });
+// Configura o HttpClient com handler de autorização
+builder.Services.AddScoped(sp =>
+{
+    var jsRuntime = sp.GetRequiredService<IJSRuntime>();
+    var handler = new AuthorizationMessageHandler(jsRuntime);
+    return new HttpClient(handler) { BaseAddress = new Uri(apiBaseUrl) };
+});
 
 // --- Configura��o de Autentica��o ---
 

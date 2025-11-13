@@ -6,7 +6,10 @@
     @inject ClinicService ClinicService
     @inject NavigationManager Nav
 
-    <h3>Minhas Clínicas</h3>
+    <div class="page-header mb-4">
+        <h3>🏥 Minhas Clínicas</h3>
+        <p class="text-muted">Gerencie o estoque das clínicas atribuídas</p>
+    </div>
 
     @if (!string.IsNullOrEmpty(errorMessage))
     {
@@ -26,11 +29,14 @@
         <div class="row">
             @foreach (var clinic in clinics)
             {
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">@clinic.Name</h5>
-                            <button class="btn btn-primary" @onclick="() => ViewClinicStock(clinic)">
+                <div class="col-md-4 mb-4">
+                    <div class="card clinic-card">
+                        <div class="card-body text-center">
+                            <div class="clinic-icon mb-3">
+                                <span style="font-size: 3rem;">🏥</span>
+                            </div>
+                            <h5 class="card-title mb-3">@clinic.Name</h5>
+                            <button class="btn btn-primary w-100" @onclick="() => ViewClinicStock(clinic)">
                                 Ver Estoque
                             </button>
                         </div>
@@ -67,4 +73,24 @@
             Nav.NavigateTo($"/clinica/{clinic.Id}/estoque");
         }
     }
+
+    <style>
+        .page-header {
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 1rem;
+        }
+
+        .clinic-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .clinic-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .clinic-icon {
+            opacity: 0.8;
+        }
+    </style>
 

@@ -6,7 +6,10 @@
 @inject MaterialService MaterialService
 @inject IJSRuntime JS
 
-<h3>Gerenciar Clínicas</h3>
+<div class="page-header mb-4">
+    <h3>🏥 Gerenciar Clínicas</h3>
+    <p class="text-muted">Controle centralizado de estoque e distribuição de materiais</p>
+</div>
 
 @if (!string.IsNullOrEmpty(errorMessage))
 {
@@ -43,16 +46,55 @@ else
                     <th>Material</th>
                     <th>Categoria</th>
                     <th class="text-center">Disponível</th>
+                    <th class="text-center">Distribuídos</th>
+                    <th class="text-center">Total</th>
+                    <th>Status nas Clínicas</th>
                     <th class="text-end">Ações</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var material in materials)
                 {
+                    var total = material.Quantity + material.DistributedQuantity;
                     <tr>
                         <td>@material.Name</td>
                         <td>@material.Category</td>
                         <td class="text-center">@material.Quantity</td>
+                        <td class="text-center">
+                            <span class="badge bg-info">@material.DistributedQuantity</span>
+                        </td>
+                        <td class="text-center">
+                            <strong>@total</strong>
+                        </td>
+                        <td>
+                            @if ((material.Category == "MateriaisDeUso" || material.Category == "Descartaveis") && material.OpenInClinics.Any())
+                            {
+                                <div class="small">
+                                    @foreach (var clinicStatus in material.OpenInClinics)
+                                    {
+                                        <div class="mb-1">
+                                            <span class="badge @(clinicStatus.IsOpen ? "bg-success" : "bg-secondary")">
+                                                @clinicStatus.ClinicName: @(clinicStatus.IsOpen ? "Aberto" : "Fechado")
+                                            </span>
+                                            @if (clinicStatus.IsOpen && clinicStatus.OpenedAt.HasValue)
+                                            {
+                                                <span class="text-muted small ms-1">
+                                                    (desde @clinicStatus.OpenedAt.Value.ToLocalTime().ToString("dd/MM/yyyy HH:mm"))
+                                                </span>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            else if (material.Category == "MateriaisDeUso" || material.Category == "Descartaveis")
+                            {
+                                <span class="text-muted small">Nenhuma clínica com estoque</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted small">-</span>
+                            }
+                        </td>
                         <td class="text-end">
                             <button class="btn btn-sm btn-outline-primary"
                                     disabled="@(selectedClinic == null || material.Quantity <= 0)"
@@ -106,7 +148,7 @@ else
                                     <td>@s.Category</td>
                                     <td>@s.QuantityAvailable</td>
                                     <td class="text-center">
-                                        @if (s.Category == "MateriaisDeUso")
+                                        @if (s.Category == "MateriaisDeUso" || s.Category == "Descartaveis")
                                         {
                                             <input type="checkbox" checked="@s.IsOpen" @onchange="(e) => ToggleOpen(s, e)" />
                                         }
@@ -127,7 +169,17 @@ else
                     </table>
                 }
 
-                <h5>Últimas Movimentações</h5>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Últimas Movimentações</h5>
+                    @if (clinicDetails.Movements.Any())
+                    {
+                        <button class="btn btn-sm btn-outline-danger" 
+                                title="Limpar log de movimentações"
+                                @onclick="ClearMovements">
+                            🗑️ Limpar Log
+                        </button>
+                    }
+                </div>
                 @if (!clinicDetails.Movements.Any())
                 {
                     <p>Nenhuma movimentação registrada.</p>
@@ -138,8 +190,13 @@ else
                         @foreach (var m in clinicDetails.Movements)
                         {
                             <li>
-                                <strong>@m.CreatedAt.ToLocalTime():</strong>
+                                <strong>@m.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss"):</strong>
                                 @m.MovementType - @m.Quantity - por @m.PerformedBy
+                                @if (!string.IsNullOrWhiteSpace(m.Note))
+                                {
+                                    <span class="text-muted"> (@m.Note)</span>
+                                }
+                                <span class="text-primary fw-semibold"> = @m.MaterialName</span>
                             </li>
                         }
                     </ul>
@@ -151,7 +208,7 @@ else
 
 @code {
     List<ClinicDto>? clinics;
-    List<MaterialDto>? materials;
+    List<MaterialWithOpenStatusDto>? materials;
     ClinicDto? selectedClinic;
     ClinicDetailDto? clinicDetails;
     string? errorMessage;
@@ -159,7 +216,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         clinics = await ClinicService.GetAll();
-        materials = await MaterialService.GetAll();
+        materials = await MaterialService.GetAllWithOpenStatus();
     }
 
     async Task SelectClinic(ClinicDto c)
@@ -173,7 +230,7 @@ else
         }
     }
 
-    async Task AllocateMaterial(MaterialDto material)
+    async Task AllocateMaterial(MaterialWithOpenStatusDto material)
     {
         errorMessage = null;
 
@@ -202,7 +259,7 @@ else
         {
             errorMessage = "Não foi possível atualizar os dados da clínica após a distribuição.";
         }
-        materials = await MaterialService.GetAll();
+        materials = await MaterialService.GetAllWithOpenStatus();
     }
 
     async Task ToggleOpen(ClinicStockDto stock, ChangeEventArgs e)
@@ -234,5 +291,60 @@ else
         {
             errorMessage = "Não foi possível atualizar os dados da clínica.";
         }
+        materials = await MaterialService.GetAllWithOpenStatus();
+    }
+
+    async Task ClearMovements()
+    {
+        errorMessage = null;
+
+        if (selectedClinic == null)
+        {
+            errorMessage = "Selecione uma clínica primeiro.";
+            return;
+        }
+
+        var confirmed = await JS.InvokeAsync<bool>("confirm", 
+            "Tem certeza que deseja limpar todo o log de movimentações? Esta ação não pode ser desfeita.");
+
+        if (!confirmed)
+            return;
+
+        var response = await ClinicService.ClearMovements(selectedClinic.Id);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var error = await response.Content.ReadAsStringAsync();
+            errorMessage = $"Erro ao limpar log: {error}";
+            return;
+        }
+
+        clinicDetails = await ClinicService.Get(selectedClinic.Id);
+        if (clinicDetails == null)
+        {
+            errorMessage = "Não foi possível atualizar os dados da clínica após limpar o log.";
+        }
     }
 }
+
+<style>
+    .page-header {
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .list-unstyled li {
+        padding: 0.75rem;
+        margin-bottom: 0.5rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #667eea;
+        transition: all 0.2s ease;
+    }
+
+    .list-unstyled li:hover {
+        background: #e9ecef;
+        transform: translateX(4px);
+    }
+</style>

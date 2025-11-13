@@ -14,10 +14,53 @@ public class MaterialsController(AppDbContext db) : ControllerBase
 
     // 🔹 GET /materials
     [HttpGet]
-    public async Task<IActionResult> GetAll() =>
-        Ok(await _db.Materials
-            .Select(m => new MaterialDto(m.Id, m.Name, m.Category.ToString(), m.Quantity))
-            .ToListAsync());
+    public async Task<IActionResult> GetAll([FromQuery] bool withOpenStatus = false)
+    {
+        if (withOpenStatus)
+        {
+            var materials = await _db.Materials.ToListAsync();
+            var allClinicStocks = await _db.ClinicStocks
+                .Include(cs => cs.Clinic)
+                .Include(cs => cs.Material)
+                .ToListAsync();
+
+            var materiaisAbertosStocks = allClinicStocks
+                .Where(cs => cs.Material.Category == Core.Entities.Enums.MaterialCategory.MateriaisDeUso ||
+                            cs.Material.Category == Core.Entities.Enums.MaterialCategory.Descartaveis)
+                .ToList();
+
+            var result = materials.Select(m => 
+            {
+                var distributedQuantity = allClinicStocks
+                    .Where(cs => cs.MaterialId == m.Id)
+                    .Sum(cs => cs.QuantityAvailable);
+
+                return new MaterialWithOpenStatusDto(
+                    m.Id,
+                    m.Name,
+                    m.Category.ToString(),
+                    m.Quantity,
+                    distributedQuantity,
+                    materiaisAbertosStocks
+                        .Where(cs => cs.MaterialId == m.Id)
+                        .Select(cs => new ClinicOpenStatusDto(
+                            cs.ClinicId,
+                            cs.Clinic.Name,
+                            cs.IsOpen,
+                            cs.OpenedAt))
+                        .ToList()
+                );
+            }).ToList();
+
+            return Ok(result);
+        }
+        else
+        {
+            return Ok(await _db.Materials
+                .Select(m => new MaterialDto(m.Id, m.Name, m.Category.ToString(), m.Quantity))
+                .ToListAsync());
+        }
+    }
 
     // 🔹 GET /materials/by-category/{category}
     [HttpGet("by-category/{category}")]
