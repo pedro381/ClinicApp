@@ -2,31 +2,31 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.JSInterop
 @using Shared.DTOs
-@attribute [Authorize(Roles = "Master")]
+@attribute [Authorize(Roles = "Master, User")]
 @inject HttpClient Http
 @inject NavigationManager Nav
 @inject IJSRuntime JS
 
 <h3>Materiais - @Category</h3>
 
-<button class="btn btn-primary mb-3" @onclick="AddNew">+ Adicionar Material</button>
+<button class="btn btn-primary mb-3" @onclick="AddNew">+ Add material</button>
 
 @if (materials == null)
 {
-    <p>Carregando...</p>
+    <p>Loading...</p>
 }
 else if (!materials.Any())
 {
-    <p>Nenhum material encontrado nesta categoria.</p>
+    <p>No items found in this category.</p>
 }
 else
 {
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Nome</th>
-                <th class="text-center">Quantidade</th>
-                <th class="text-end">Ações</th>
+                <th>Name</th>
+                <th class="text-center">Quantity</th>
+                <th class="text-end">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -36,8 +36,12 @@ else
                     <td>@m.Name</td>
                     <td class="text-center">@m.Quantity</td>
                     <td class="text-end">
-                        <button class="btn btn-sm btn-outline-primary me-2" @onclick="() => AddStock(m)">Adicionar</button>
-                        <button class="btn btn-sm btn-danger" @onclick="() => Delete(m.Id)">Excluir</button>
+                        <AuthorizeView Roles="Master">
+                            <Authorized>
+                                <button class="btn btn-sm btn-outline-primary me-2" @onclick="() => AddStock(m)">Add</button>
+                                <button class="btn btn-sm btn-danger" @onclick="() => Delete(m.Id)">Delete</button>
+                            </Authorized>
+                        </AuthorizeView>
                     </td>
                 </tr>
             }

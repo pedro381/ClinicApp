@@ -2,9 +2,9 @@
 {
     public enum MaterialCategory
     {
-        Descartaveis = 1,
-        Duraveis = 2,
-        MateriaisDeUso = 3
+        Disposables = 1,
+        Durables = 2,
+        UsageMaterials = 3
     }
 
 }

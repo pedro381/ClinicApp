@@ -1,0 +1,32 @@
+.home-hero-wrapper {
+    position: relative;
+    left: -1.5rem;
+    width: calc(100% + 3rem);
+}
+
+.home-hero {
+    min-height: calc(100vh - 4rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.home-hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+}
+
+@media (max-width: 768px) {
+    .home-hero-wrapper {
+        left: -1rem;
+        width: calc(100% + 2rem);
+    }
+
+    .home-hero {
+        min-height: calc(100vh - 3rem);
+    }
+}
+

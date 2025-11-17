@@ -1,24 +1,24 @@
 ﻿@page "/materiais/{Category}/addMaterial"
 @using Microsoft.AspNetCore.Authorization
 @using Shared.DTOs
-@attribute [Authorize(Roles = "Master")]
+@attribute [Authorize(Roles = "Master, User")]
 @inject HttpClient Http
 @inject NavigationManager Nav
 
-<h3>Adicionar Material - @Category</h3>
+<h3>Add Material - @Category</h3>
 
 <div class="mb-3">
-    <label>Nome do Material</label>
+    <label>Material Name</label>
     <input class="form-control" @bind="Name" />
 </div>
 
 <div class="mb-3">
-    <label>Quantidade</label>
+    <label>Quantity</label>
     <input type="number" class="form-control" @bind="Quantity" min="0" />
 </div>
 
-<button class="btn btn-success" @onclick="Create">Salvar</button>
-<button class="btn btn-secondary ms-2" @onclick="Cancel">Cancelar</button>
+<button class="btn btn-success" @onclick="Create">Save</button>
+<button class="btn btn-secondary ms-2" @onclick="Cancel">Cancel</button>
 
 @code {
     [Parameter] public string Category { get; set; } = string.Empty;

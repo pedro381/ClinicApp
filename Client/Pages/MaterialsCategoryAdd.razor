@@ -1,6 +1,6 @@
 ﻿@page "/materiais/{Category}/add"
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "Master")]
+@attribute [Authorize(Roles = "Master, User")]
 @inject HttpClient Http
 @inject NavigationManager Nav
 
@@ -17,11 +17,11 @@
     </div>
 }
 
-<button class="btn btn-outline-primary mb-3" @onclick="AddNewMaterial">+ Adicionar outro</button>
+<button class="btn btn-outline-primary mb-3" @onclick="AddNewMaterial">+ Add another</button>
 
 <div>
     <button class="btn btn-success" @onclick="SaveAll">Salvar Tudo</button>
-    <button class="btn btn-secondary ms-2" @onclick="@(() => Nav.NavigateTo($"/materiais/{Category}"))">Cancelar</button>
+    <button class="btn btn-secondary ms-2" @onclick="@(() => Nav.NavigateTo($"/materiais/{Category}"))">Cancel</button>
 </div>
 
 @code {

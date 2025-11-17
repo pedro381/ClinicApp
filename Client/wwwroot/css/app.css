@@ -312,3 +312,66 @@ h3 {
 code {
     color: #c02d76;
 }
+
+/* Fundo com gradiente combinando com a logo 
+.login-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, #004b2f 0%, #00311f 100%);
+}*/
+.login-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Configura��o para usar a imagem como fundo de tela */
+    background-image: url('/imagens/LogoLogin.jpeg');
+    background-size: cover; /* Estica a imagem para cobrir toda a área horizontal e vertical */
+    background-position: center; /* Centraliza a imagem */
+    background-repeat: no-repeat; /* Evita repeti��o */
+    /* Opcional: Adicionar um gradiente sutil por cima para escurecer o fundo e aumentar a legibilidade da caixa de login */
+    background-blend-mode: multiply; /* Mistura o fundo com uma cor */
+    background-color: rgba(0, 0, 0, 0.4); /* Cor escura que ser� misturada */
+}
+
+/* Card central com sombra suave */
+.login-card {
+    background: white;
+    padding: 40px;
+    width: 380px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* Logo */
+.login-logo {
+    width: 150px;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 6px rgba(0, 255, 100, 0.5));
+}
+
+/* T�tulo */
+.login-title {
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: #003d26;
+}
+
+/* Bot�o com cor da logo */
+.btn-login {
+    background-color: #006b41;
+    border: none;
+    font-weight: bold;
+    color: white;
+    transition: 0.2s;
+}
+
+.btn-login:hover {
+    background-color: #009955;
+    transform: scale(1.02);
+}
+

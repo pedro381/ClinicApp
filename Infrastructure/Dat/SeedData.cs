@@ -25,9 +25,9 @@ namespace Infrastructure.Dat
             {
                 var clinics = new[]
                 {
-                    new Clinic { Name = "Clínica Centro" },
-                    new Clinic { Name = "Clínica Norte" },
-                    new Clinic { Name = "Clínica Sul" }
+                    new Clinic { Name = "Alpha Dental Somerville" },
+                    new Clinic { Name = "Alpha Dental Chelsea" },
+                    new Clinic { Name = "Alpha Dental Framingham" }
                 };
 
                 db.Clinics.AddRange(clinics);

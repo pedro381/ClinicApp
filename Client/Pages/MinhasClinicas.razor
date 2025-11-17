@@ -7,7 +7,7 @@
     @inject NavigationManager Nav
 
     <div class="page-header mb-4">
-        <h3>🏥 Minhas Clínicas</h3>
+        <h3>🏥 My Clinics</h3>
         <p class="text-muted">Gerencie o estoque das clínicas atribuídas</p>
     </div>
 
@@ -18,11 +18,11 @@
 
     @if (clinics == null)
     {
-        <p>Carregando...</p>
+        <p>Loading ...</p>
     }
     else if (!clinics.Any())
     {
-        <p>Nenhuma clínica cadastrada.</p>
+        <p>There are no clinics registered.</p>
     }
     else
     {
@@ -37,7 +37,7 @@
                             </div>
                             <h5 class="card-title mb-3">@clinic.Name</h5>
                             <button class="btn btn-primary w-100" @onclick="() => ViewClinicStock(clinic)">
-                                Ver Estoque
+                                Check Inventory
                             </button>
                         </div>
                     </div>

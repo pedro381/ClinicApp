@@ -10,7 +10,7 @@
 
 <div class="login-container">
     <div class="login-card">
-        <h3>🔐 Login</h3>
+        <h3>🔐 Inventory Management System </h3>
         
         @if (!string.IsNullOrEmpty(errorMessage))
         {
@@ -21,13 +21,13 @@
             <DataAnnotationsValidator />
             
             <div class="mb-3">
-                <label>Usuário</label>
+                <label>User</label>
                 <InputText @bind-Value="loginRequest.UserName" class="form-control" />
                 <ValidationMessage For="@(() => loginRequest.UserName)" />
             </div>
 
             <div class="mb-3">
-                <label>Senha</label>
+                <label>Password</label>
                 <InputText @bind-Value="loginRequest.Password" type="password" class="form-control" />
                 <ValidationMessage For="@(() => loginRequest.Password)" />
             </div>
@@ -35,11 +35,11 @@
             <button type="submit" class="btn btn-primary w-100" disabled="@isLoading">
                 @if (isLoading)
                 {
-                    <span>Carregando...</span>
+                    <span>Loading...</span>
                 }
                 else
                 {
-                    <span>Entrar</span>
+                    <span>Login</span>
                 }
             </button>
         </EditForm>
@@ -67,27 +67,16 @@
                 var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
                 var user = authState.User;
 
-                if (user.IsInRole("Master"))
-                {
-                    Navigation.NavigateTo("/clinicas", forceLoad: true);
-                }
-                else if (user.IsInRole("User"))
-                {
-                    Navigation.NavigateTo("/minhas-clinicas", forceLoad: true);
-                }
-                else
-                {
-                    Navigation.NavigateTo("/", forceLoad: true);
-                }
+                Navigation.NavigateTo("/home", forceLoad: true);
             }
             else
             {
-                errorMessage = "Usuário ou senha inválidos.";
+                errorMessage = "Login failed. Please check your credentials.";
             }
         }
         catch (Exception ex)
         {
-            errorMessage = $"Erro ao fazer login: {ex.Message}";
+            errorMessage = $"Login error: {ex.Message}";
         }
         finally
         {

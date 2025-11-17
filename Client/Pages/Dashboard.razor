@@ -4,11 +4,11 @@
 @attribute [Authorize(Roles = "Master")]
 @inject DashboardService DashboardService
 
-<h3>Dashboard Geral</h3>
+<h3>General Dashboard</h3>
 
 @if (summary == null)
 {
-    <p>Carregando...</p>
+    <p>Loading...</p>
 }
 else
 {
@@ -17,16 +17,16 @@ else
         {
             <div class="card m-2 p-2" style="width:220px;">
                 <h5>@c.ClinicName</h5>
-                <p>Materiais distintos: @c.DistinctMaterials</p>
-                <p>Total em estoque: @c.TotalQuantity</p>
+                <p>Distinct materials: @c.DistinctMaterials</p>
+                <p>Total in stock: @c.TotalQuantity</p>
             </div>
         }
     </div>
 
     <div class="mt-4">
-        <p>Total clínicas: @summary.TotalClinics</p>
-        <p>Total materiais distintos (soma): @summary.TotalMaterials</p>
-        <p>Total unidades em estoque: @summary.TotalQuantity</p>
+        <p>Total clinics: @summary.TotalClinics</p>
+        <p>Total distinct materials (sum): @summary.TotalMaterials</p>
+        <p>Total units in stock: @summary.TotalQuantity</p>
     </div>
 }
 

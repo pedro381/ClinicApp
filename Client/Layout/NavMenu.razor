@@ -4,7 +4,7 @@
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">
-            <strong>🏥 MyClinic</strong>
+            <strong>🦷 ALPHA DENTAL</strong>
         </a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
@@ -18,28 +18,34 @@
 
         <AuthorizeView Roles="Master">
             <Authorized>
-                <li><NavLink href="/clinicas">🏥 Clínicas</NavLink></li>
-                <li><NavLink href="/estoque-geral">📊 Estoque Geral</NavLink></li>
-                <li><NavLink href="/materiais">📦 Materiais de Consumo</NavLink></li>
-                <li><NavLink href="/funcionarios">👥 RH - Funcionários</NavLink></li>
+                <li><NavLink href="/clinicas">🏥 Clinics</NavLink></li>
+                <li><NavLink href="/estoque-geral">📊 General Inventory</NavLink></li>
+                <li><NavLink href="/materiais">📦 Consumable Materials</NavLink></li>
+                <li><NavLink href="/funcionarios">👥 HR - Employees</NavLink></li>
             </Authorized>
         </AuthorizeView>
 
         <AuthorizeView Roles="User">
             <Authorized>
-                <li><NavLink href="/minhas-clinicas">🏥 Minhas Clínicas</NavLink></li>
+                <li><NavLink href="/minhas-clinicas">🏥 My Clinics</NavLink></li>
+                <li><NavLink href="/materiais">📦 Consumable Materials</NavLink></li>
             </Authorized>
         </AuthorizeView>
 
         <AuthorizeView>
             <Authorized>
-                <li><a href="" @onclick="Logout">🚪 Sair</a></li>
+                <li><a href="" @onclick="Logout">🚪 Logout</a></li>
             </Authorized>
             <NotAuthorized>
                 <li><NavLink href="/login">🔐 Login</NavLink></li>
             </NotAuthorized>
         </AuthorizeView>
     </ul>
+    
+    <!-- Logo no rodapé -->
+    <div class="nav-footer">
+        <img src="/imagens/LogoNav.png" alt="Alpha Dental Logo" class="nav-logo" />
+    </div>
 </div>
 
 @code {

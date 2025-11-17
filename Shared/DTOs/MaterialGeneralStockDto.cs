@@ -4,6 +4,7 @@ public record MaterialGeneralStockDto(
     Guid Id,
     string Name,
     string Category,
+    int WarehouseQuantity,
     int TotalQuantity,
     IReadOnlyList<MaterialClinicStockDto> Clinics);
 

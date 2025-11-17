@@ -1,28 +1,9 @@
 ﻿@page "/home"
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.Authorization
 @attribute [Authorize]
-@inject NavigationManager Nav
-@inject AuthenticationStateProvider AuthenticationStateProvider
 
-@code {
-    protected override async Task OnInitializedAsync()
-    {
-        // Redireciona baseado no role
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        
-        if (user.IsInRole("Master"))
-        {
-            Nav.NavigateTo("/clinicas");
-        }
-        else if (user.IsInRole("User"))
-        {
-            Nav.NavigateTo("/minhas-clinicas");
-        }
-        else
-        {
-            Nav.NavigateTo("/login");
-        }
-    }
-}
+<div class="home-hero-wrapper">
+    <div class="home-hero">
+        <img src="/imagens/LogoLogin.jpeg" alt="Alpha Dental Logo" class="home-hero__image" />
+    </div>
+</div>

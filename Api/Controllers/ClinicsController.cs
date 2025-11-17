@@ -201,8 +201,8 @@ public class ClinicsController(AppDbContext db) : ControllerBase
         if (clinicStock == null)
             return NotFound("Registro de estoque não encontrado.");
 
-        if (clinicStock.Material.Category != MaterialCategory.MateriaisDeUso && 
-            clinicStock.Material.Category != MaterialCategory.Descartaveis)
+        if (clinicStock.Material.Category != MaterialCategory.UsageMaterials && 
+            clinicStock.Material.Category != MaterialCategory.Disposables)
             return BadRequest("Apenas materiais de uso e descartáveis podem ser marcados como abertos.");
 
         if (request.IsOpen && !clinicStock.IsOpen)

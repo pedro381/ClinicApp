@@ -8,8 +8,8 @@
 @inject IJSRuntime JS
 
 <div class="page-header mb-4">
-    <h3>📦 Estoque - @(clinicDetails?.Name ?? "Carregando...")</h3>
-    <p class="text-muted">Gerencie materiais e movimentações do estoque</p>
+    <h3>📦 Inventory - @(clinicDetails?.Name ?? "Loading...")</h3>
+    <p class="text-muted">Manage materials and inventory movements</p>
 </div>
 
 @if (!string.IsNullOrEmpty(errorMessage))
@@ -24,54 +24,114 @@
 
 @if (clinicDetails == null)
 {
-    <p>Carregando...</p>
+    <p>Loading...</p>
 }
 else
 {
     <div class="mb-3">
-        <a href="/minhas-clinicas" class="btn btn-secondary">← Voltar</a>
+        <a href="/minhas-clinicas" class="btn btn-secondary">← Back</a>
     </div>
 
-    <div class="card mb-4">
-        <div class="card-header">
-            <h5 class="mb-0">➕ Adicionar Material ao Estoque da Clínica</h5>
+    <div class="card mb-4 insert-card">
+        <div class="card-header insert-card-header d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-dark toggle-collapse"
+                        title="@(isInsertSectionCollapsed ? "Expand section" : "Collapse section")"
+                        @onclick="ToggleInsertSection">
+                    @(isInsertSectionCollapsed ? "+" : "−")
+                </button>
+                <h5 class="mb-0">➕ Insert Material into Clinic Inventory</h5>
+            </div>
+            @if (!isInsertSectionCollapsed)
+            {
+                <input class="form-control form-control-sm w-100 w-md-auto"
+                       type="search"
+                       placeholder="Search material or category"
+                       @bind="materialSearchTerm"
+                       @bind:event="oninput" />
+            }
         </div>
+        @if (!isInsertSectionCollapsed)
+        {
         <div class="card-body">
             @if (materialsCatalog == null)
             {
-                <p>Carregando catálogo de materiais...</p>
+                <p>Loading materials catalog..</p>
             }
             else if (!materialsCatalog.Any())
             {
-                <p class="text-muted">Nenhum material cadastrado. Peça ao administrador para registrar materiais.</p>
+                <p class="text-muted">No materials have been registered. Contact the administrator to add materials.</p>
             }
             else
             {
+                var filteredMaterials = FilterMaterialsCatalog().ToList();
+                if (!filteredMaterials.Any())
+                {
+                    <p class="text-muted">No materials found for "@materialSearchTerm".</p>
+                }
+                else
+                {
                 <div class="table-responsive">
                     <table class="table table-sm table-hover">
                         <thead>
                             <tr>
                                 <th>Material</th>
-                                <th>Categoria</th>
-                                <th class="text-center">Quantidade na Clínica</th>
-                                <th class="text-end">Ação</th>
+                                <th>Category</th>
+                                <th class="text-center">Total in Warehouse</th>
+                                <th class="text-center">Total in Clinics</th>
+                                <th>Distribution by Clinic</th>
+                                <th class="text-end">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var material in materialsCatalog)
+                            @foreach (var material in filteredMaterials)
                             {
-                                var clinicQuantity = clinicDetails?.Stocks.FirstOrDefault(s => s.MaterialId == material.Id)?.QuantityAvailable ?? 0;
-                                <tr>
+                                var isLowStock = material.WarehouseQuantity <= 1;
+                                <tr class="@(isLowStock ? "table-danger" : string.Empty)">
                                     <td>@material.Name</td>
                                     <td>@material.Category</td>
                                     <td class="text-center">
-                                        <span class="badge @(clinicQuantity > 0 ? "bg-info" : "bg-secondary")">@clinicQuantity</span>
+                                        @if (material.WarehouseQuantity > 0)
+                                        {
+                                            <strong>@material.WarehouseQuantity</strong>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">0</span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        @if (material.TotalQuantity > 0)
+                                        {
+                                            <strong>@material.TotalQuantity</strong>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">0</span>
+                                        }
+                                    </td>
+                                    <td class="align-middle">
+                                        @if (material.Clinics.Any())
+                                        {
+                                            <div class="clinic-badges">
+                                                @foreach (var clinic in material.Clinics)
+                                                {
+                                                    <span class="clinic-badge" title="@($"{clinic.ClinicName}: {clinic.Quantity} unidade(s)")">
+                                                        @clinic.ClinicName: @clinic.Quantity
+                                                    </span>
+                                                }
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted small">No clinics have available stock.</span>
+                                        }
                                     </td>
                                     <td class="text-end">
                                         <button class="btn btn-sm btn-success"
                                                 title="Adicionar material diretamente ao estoque desta clínica"
                                                 @onclick="() => AddMaterialToClinic(material)">
-                                            ➕ Adicionar
+                                            ➕ Add
                                         </button>
                                     </td>
                                 </tr>
@@ -79,14 +139,16 @@ else
                         </tbody>
                     </table>
                 </div>
+                }
             }
         </div>
+        }
     </div>
 
     <h5>Estoque da Clínica</h5>
     @if (!clinicDetails.Stocks.Any())
     {
-        <p>Esta clínica não possui materiais no estoque.</p>
+        <p>This clinic has no materials in stock.</p>
     }
     else
     {
@@ -94,22 +156,23 @@ else
             <thead>
                 <tr>
                     <th>Material</th>
-                    <th>Categoria</th>
-                    <th class="text-center">Quantidade Disponível</th>
-                    <th class="text-center">Aberto</th>
-                    <th class="text-center">Aberto Desde</th>
-                    <th class="text-end">Ações</th>
+                    <th>Category</th>
+                    <th class="text-center">Available Quantity</th>
+                    <th class="text-center">Open</th>
+                    <th class="text-center">Open Since</th>
+                    <th class="text-end">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var stock in clinicDetails.Stocks)
                 {
-                    <tr>
+                    var isLowStock = stock.QuantityAvailable <= 1;
+                    <tr class="@(isLowStock ? "table-danger" : string.Empty)">
                         <td>@stock.MaterialName</td>
                         <td>@stock.Category</td>
                         <td class="text-center">@stock.QuantityAvailable</td>
                         <td class="text-center">
-                            @if (stock.Category == "MateriaisDeUso" || stock.Category == "Descartaveis")
+                            @if (stock.Category == "UsageMaterials" || stock.Category == "Disposables")
                             {
                                 <div class="form-check form-switch d-inline-block">
                                     <input class="form-check-input" 
@@ -149,7 +212,7 @@ else
                                     disabled="@(stock.QuantityAvailable <= 0)"
                                     title="Consumir material do estoque"
                                     @onclick="() => ConsumeMaterial(stock)">
-                                Consumir
+                                Consume
                             </button>
                         </td>
                     </tr>
@@ -157,72 +220,59 @@ else
             </tbody>
         </table>
     }
-
-    <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
-        <h5 class="mb-0">Últimas Movimentações</h5>
-        @if (clinicDetails.Movements.Any())
-        {
-            <button class="btn btn-sm btn-outline-danger" 
-                    title="Limpar log de movimentações"
-                    @onclick="ClearMovements">
-                🗑️ Limpar Log
-            </button>
-        }
-    </div>
-    @if (!clinicDetails.Movements.Any())
-    {
-        <p>Nenhuma movimentação registrada.</p>
-    }
-    else
-    {
-        <ul class="list-unstyled">
-            @foreach (var movement in clinicDetails.Movements.Take(20))
-            {
-                <li>
-                    <strong>@movement.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss"):</strong>
-                    @movement.MovementType - @movement.Quantity - por @movement.PerformedBy
-                    @if (!string.IsNullOrWhiteSpace(movement.Note))
-                    {
-                        <span class="text-muted"> (@movement.Note)</span>
-                    }
-                    <span class="text-primary fw-semibold"> = @movement.MaterialName</span>
-                </li>
-            }
-        </ul>
-    }
 }
 
 @code {
     [Parameter] public string ClinicIdString { get; set; } = string.Empty;
     private Guid ClinicId => Guid.TryParse(ClinicIdString, out var id) ? id : Guid.Empty;
     ClinicDetailDto? clinicDetails;
-    List<MaterialDto>? materialsCatalog;
+    List<MaterialGeneralStockDto>? materialsCatalog;
     string? errorMessage;
     string? successMessage;
+    string materialSearchTerm = string.Empty;
+    bool isInsertSectionCollapsed;
 
     protected override async Task OnParametersSetAsync()
     {
         if (!string.IsNullOrWhiteSpace(ClinicIdString) && Guid.TryParse(ClinicIdString, out _))
         {
             await LoadClinicDetails();
-            await LoadMaterialsCatalog();
+            await LoadGeneralInventory();
         }
         else if (!string.IsNullOrWhiteSpace(ClinicIdString))
         {
-            errorMessage = "ID da clínica inválido.";
+            errorMessage = "Clinic ID is invalid.";
         }
     }
 
-    async Task LoadMaterialsCatalog()
+    async Task LoadGeneralInventory()
     {
         try
         {
-            materialsCatalog = await MaterialService.GetAll();
+            materialsCatalog = await MaterialService.GetGeneralSummary();
         }
         catch (Exception ex)
         {
-            errorMessage = $"Erro ao carregar catálogo de materiais: {ex.Message}";
+            errorMessage = $"Error loading materials catalog: {ex.Message}";
         }
+    }
+
+    IEnumerable<MaterialGeneralStockDto> FilterMaterialsCatalog()
+    {
+        if (materialsCatalog == null || !materialsCatalog.Any())
+        {
+            return Enumerable.Empty<MaterialGeneralStockDto>();
+        }
+
+        if (string.IsNullOrWhiteSpace(materialSearchTerm))
+        {
+            return materialsCatalog;
+        }
+
+        var normalized = materialSearchTerm.Trim();
+        return materialsCatalog.Where(m =>
+            (!string.IsNullOrWhiteSpace(m.Name) && m.Name.Contains(normalized, StringComparison.OrdinalIgnoreCase)) ||
+            (!string.IsNullOrWhiteSpace(m.Category) && m.Category.Contains(normalized, StringComparison.OrdinalIgnoreCase)));
     }
 
     async Task LoadClinicDetails()
@@ -231,14 +281,14 @@ else
         {
             if (!Guid.TryParse(ClinicIdString, out var clinicId) || clinicId == Guid.Empty)
             {
-                errorMessage = "ID da clínica inválido.";
+                errorMessage = "Invalid clinic ID.";
                 return;
             }
 
             clinicDetails = await ClinicService.Get(clinicId);
             if (clinicDetails == null)
             {
-                errorMessage = "Clínica não encontrada.";
+                errorMessage = "Clinic not found.";
             }
             else
             {
@@ -247,7 +297,7 @@ else
         }
         catch (Exception ex)
         {
-            errorMessage = $"Erro ao carregar detalhes da clínica: {ex.Message}";
+            errorMessage = $"Error loading clinic details: {ex.Message}";
             clinicDetails = null;
         }
     }
@@ -259,32 +309,31 @@ else
 
         if (stock.QuantityAvailable <= 0)
         {
-            errorMessage = "Não há quantidade disponível para consumir.";
+            errorMessage = "No available quantity to consume.";
             return;
         }
 
         var input = await JS.InvokeAsync<string?>("prompt", 
-            $"Quantidade de '{stock.MaterialName}' para consumir (máximo: {stock.QuantityAvailable})", 
-            "1");
+            $"Quantity of '{stock.MaterialName}' to consume (maximum: {stock.QuantityAvailable})", "1");
 
         if (string.IsNullOrWhiteSpace(input))
             return;
 
         if (!int.TryParse(input, out var quantity) || quantity <= 0)
         {
-            errorMessage = "Informe uma quantidade válida.";
+            errorMessage = "Please enter a valid quantity.";
             return;
         }
 
         if (quantity > stock.QuantityAvailable)
         {
-            errorMessage = $"Quantidade solicitada ({quantity}) é maior que a disponível ({stock.QuantityAvailable}).";
+            errorMessage = $"Requested quantity ({quantity}) exceeds available stock ({stock.QuantityAvailable}).";
             return;
         }
 
         if (!Guid.TryParse(ClinicIdString, out var clinicId))
         {
-            errorMessage = "ID da clínica inválido.";
+            errorMessage = "Invalid clinic ID.";
             return;
         }
 
@@ -293,28 +342,28 @@ else
         if (!response.IsSuccessStatusCode)
         {
             var error = await response.Content.ReadAsStringAsync();
-            errorMessage = $"Erro ao consumir material: {error}";
+            errorMessage = $"Error consuming material: {error}";
             return;
         }
 
-        successMessage = $"Material consumido com sucesso! Quantidade restante atualizada.";
+        successMessage = "Material successfully consumed! Remaining quantity updated.";
         await LoadClinicDetails();
-        await LoadMaterialsCatalog();
+        await LoadGeneralInventory();
     }
 
-    async Task AddMaterialToClinic(MaterialDto material)
+    async Task AddMaterialToClinic(MaterialGeneralStockDto material)
     {
         errorMessage = null;
         successMessage = null;
 
         if (!Guid.TryParse(ClinicIdString, out var clinicId))
         {
-            errorMessage = "ID da clínica inválido.";
+            errorMessage = "Invalid clinic ID.";
             return;
         }
 
-        var input = await JS.InvokeAsync<string?>("prompt", 
-            $"Quantidade de '{material.Name}' para adicionar ao estoque da clínica", 
+        var input = await JS.InvokeAsync<string?>("prompt",
+            $"Quantity of '{material.Name}' to add to clinic inventory",
             "1");
 
         if (string.IsNullOrWhiteSpace(input))
@@ -322,7 +371,7 @@ else
 
         if (!int.TryParse(input, out var quantity) || quantity <= 0)
         {
-            errorMessage = "Informe uma quantidade válida.";
+            errorMessage = "Please enter a valid quantity.";
             return;
         }
 
@@ -331,13 +380,13 @@ else
         if (!response.IsSuccessStatusCode)
         {
             var error = await response.Content.ReadAsStringAsync();
-            errorMessage = $"Erro ao adicionar material: {error}";
+            errorMessage = $"Error adding material: {error}";
             return;
         }
 
-        successMessage = $"Material adicionado com sucesso! {quantity} unidade(s) de '{material.Name}' foram registrados no estoque.";
+        successMessage = $"Material successfully added! {quantity} unit(s) of '{material.Name}' have been registered in inventory.";
         await LoadClinicDetails();
-        await LoadMaterialsCatalog();
+        await LoadGeneralInventory();
     }
 
     async Task ToggleOpen(ClinicStockDto stock, ChangeEventArgs e)
@@ -345,15 +394,15 @@ else
         errorMessage = null;
         successMessage = null;
 
-        if (stock.Category != "MateriaisDeUso" && stock.Category != "Descartaveis")
+        if (stock.Category != "UsageMaterials" && stock.Category != "Disposables")
         {
-            errorMessage = "Apenas materiais de uso e descartáveis podem ser marcados como abertos.";
+            errorMessage = "Only usage and disposable materials can be marked as open.";
             return;
         }
 
         if (!Guid.TryParse(ClinicIdString, out var clinicId))
         {
-            errorMessage = "ID da clínica inválido.";
+            errorMessage = "Invalid clinic ID.";
             return;
         }
 
@@ -372,45 +421,17 @@ else
         if (!response.IsSuccessStatusCode)
         {
             var error = await response.Content.ReadAsStringAsync();
-            errorMessage = $"Erro ao alterar status do material: {error}";
-            // Reverter o checkbox
+            errorMessage = $"Error changing material status: {error}";
+            // Revert checkbox
             await LoadClinicDetails();
             return;
         }
 
-        successMessage = $"Material marcado como {(isChecked ? "aberto" : "fechado")} com sucesso!";
+        successMessage = $"Material successfully marked as {(isChecked ? "open" : "closed")}!";
         await LoadClinicDetails();
     }
 
-    async Task ClearMovements()
-    {
-        errorMessage = null;
-        successMessage = null;
-
-        var confirmed = await JS.InvokeAsync<bool>("confirm", 
-            "Tem certeza que deseja limpar todo o log de movimentações? Esta ação não pode ser desfeita.");
-
-        if (!confirmed)
-            return;
-
-        if (!Guid.TryParse(ClinicIdString, out var clinicId))
-        {
-            errorMessage = "ID da clínica inválido.";
-            return;
-        }
-
-        var response = await ClinicService.ClearMovements(clinicId);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            var error = await response.Content.ReadAsStringAsync();
-            errorMessage = $"Erro ao limpar log: {error}";
-            return;
-        }
-
-        successMessage = "Log de movimentações limpo com sucesso!";
-        await LoadClinicDetails();
-    }
+    void ToggleInsertSection() => isInsertSectionCollapsed = !isInsertSectionCollapsed;
 }
 
 <style>
@@ -420,18 +441,45 @@ else
         margin-bottom: 2rem;
     }
 
-    .list-unstyled li {
-        padding: 0.75rem;
-        margin-bottom: 0.5rem;
-        background: #f8f9fa;
-        border-radius: 8px;
-        border-left: 4px solid #667eea;
-        transition: all 0.2s ease;
+    .insert-card-header {
+        background-color: #050505 !important;
+        background-image: none !important;
+        color: #22c55e;
+        border-bottom: none;
     }
 
-    .list-unstyled li:hover {
-        background: #e9ecef;
-        transform: translateX(4px);
+    .insert-card-header h5 {
+        color: #22c55e;
+    }
+
+    .insert-card-header .toggle-collapse {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        border-radius: 50%;
+        line-height: 1;
+    }
+
+    .insert-card-header input {
+        max-width: 320px;
+    }
+
+    .clinic-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+    }
+
+    .clinic-badge {
+        background: #e9f2ff;
+        color: #1d4ed8;
+        border-radius: 999px;
+        padding: 0.3rem 0.65rem;
+        font-weight: 600;
+        font-size: 0.8rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
     }
 </style>
 

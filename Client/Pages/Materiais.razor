@@ -1,24 +1,26 @@
 ﻿@page "/materiais"
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "Master")]
+@attribute [Authorize(Roles = "Master, User")]
 @inject NavigationManager Nav
 
-<h3 class="mb-4">Gerenciar Materiais</h3>
+
+
+<h3 class="mb-4">Manage Materials</h3>
 
 <div class="d-flex gap-3 flex-wrap">
-    <div class="card p-4 text-center shadow-sm" style="cursor:pointer; width:220px" @onclick='() => GoToCategory("Descartaveis")'>
-        <h5>Descartáveis</h5>
-        <p>Materiais de uso único</p>
+    <div class="card p-4 text-center shadow-sm" style="cursor:pointer; width:220px" @onclick='() => GoToCategory("Disposables")'>
+        <h5>Disposables</h5>
+        <p>Single-use materials</p>
     </div>
 
-    <div class="card p-4 text-center shadow-sm" style="cursor:pointer; width:220px" @onclick='() => GoToCategory("Duraveis")'>
-        <h5>Duráveis</h5>
-        <p>Itens de longa duração</p>
+    <div class="card p-4 text-center shadow-sm" style="cursor:pointer; width:220px" @onclick='() => GoToCategory("Durables")'>
+        <h5>Durables</h5>
+        <p>Long-lasting items</p>
     </div>
 
-    <div class="card p-4 text-center shadow-sm" style="cursor:pointer; width:220px" @onclick='() => GoToCategory("MateriaisDeUso")'>
-        <h5>Materiais de Uso</h5>
-        <p>Itens de consumo diário</p>
+    <div class="card p-4 text-center shadow-sm" style="cursor:pointer; width:220px" @onclick='() => GoToCategory("UsageMaterials")'>
+        <h5>Usage Materials</h5>
+        <p>Daily consumption items</p>
     </div>
 </div>
 

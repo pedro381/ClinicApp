@@ -19,26 +19,26 @@
     <div class="alert alert-success">@successMessage</div>
 }
 
-<button class="btn btn-primary mb-3" @onclick="ShowAddForm">+ Adicionar Funcionário</button>
+<button class="btn btn-primary mb-3" @onclick="ShowAddForm">+ Register Employee</button>
 
 @if (users == null)
 {
-    <p>Carregando...</p>
+    <p>Loading...</p>
 }
 else if (!users.Any())
 {
-    <p>Nenhum funcionário cadastrado.</p>
+    <p>No employees registered.</p>
 }
 else
 {
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Nome de Usuário</th>
+                <th>Username</th>
                 <th>Email</th>
-                <th>Função</th>
-                <th>Data de Criação</th>
-                <th class="text-end">Ações</th>
+                <th>Role</th>
+                <th>Creation Date</th>
+                <th class="text-end">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -50,8 +50,8 @@ else
                     <td>@user.Role</td>
                     <td>@user.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
                     <td class="text-end">
-                        <button class="btn btn-sm btn-outline-primary me-2" @onclick="() => EditUser(user)">Editar</button>
-                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteUser(user)">Excluir</button>
+                        <button class="btn btn-sm btn-outline-primary me-2" @onclick="() => EditUser(user)">Edit</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteUser(user)">Delete</button>
                     </td>
                 </tr>
             }
@@ -90,8 +90,8 @@ else
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="CancelForm">Cancelar</button>
-                    <button type="button" class="btn btn-primary" @onclick="SaveUser">Salvar</button>
+                    <button type="button" class="btn btn-secondary" @onclick="CancelForm">Cancel</button>
+                    <button type="button" class="btn btn-primary" @onclick="SaveUser">Save</button>
                 </div>
             </div>
         </div>
@@ -124,7 +124,7 @@ else
         }
         catch (Exception ex)
         {
-            errorMessage = $"Erro ao carregar funcionários: {ex.Message}";
+            errorMessage = $"Error loading employees: {ex.Message}";
         }
     }
 
@@ -167,7 +167,7 @@ else
 
         if (string.IsNullOrWhiteSpace(formUserName) || string.IsNullOrWhiteSpace(formEmail))
         {
-            errorMessage = "Nome de usuário e email são obrigatórios.";
+            errorMessage = "Username and email are required.";
             return;
         }
 
@@ -175,7 +175,7 @@ else
         {
             if (string.IsNullOrWhiteSpace(formPassword))
             {
-                errorMessage = "Senha é obrigatória ao criar um novo funcionário.";
+                errorMessage = "Password is required when creating a new employee.";
                 return;
             }
 
@@ -184,11 +184,11 @@ else
 
             if (result == null)
             {
-                errorMessage = "Erro ao criar funcionário. Verifique se o usuário ou email já existe.";
+                errorMessage = "Error creating employee. Please check if the username or email already exists.";
             }
             else
             {
-                successMessage = "Funcionário criado com sucesso!";
+                successMessage = "Employee successfully created!";
                 showForm = false;
                 await LoadUsers();
             }
@@ -206,11 +206,11 @@ else
 
             if (result == null)
             {
-                errorMessage = "Erro ao atualizar funcionário. Verifique se o usuário ou email já existe.";
+                errorMessage = "Error updating employee. Please check if the username or email already exists.";
             }
             else
             {
-                successMessage = "Funcionário atualizado com sucesso!";
+                successMessage = "Employee successfully updated!";
                 showForm = false;
                 await LoadUsers();
             }
@@ -219,20 +219,20 @@ else
 
     async Task DeleteUser(UserDto user)
     {
-        if (!await JS.InvokeAsync<bool>("confirm", $"Tem certeza que deseja excluir o funcionário {user.UserName}?"))
+        if (!await JS.InvokeAsync<bool>("confirm", $"Are you sure you want to delete employee {user.UserName}?"))
             return;
 
         var response = await UserService.Delete(user.Id);
 
         if (response.IsSuccessStatusCode)
         {
-            successMessage = "Funcionário excluído com sucesso!";
+            successMessage = "Employee successfully deleted!";
             await LoadUsers();
         }
         else
         {
             var error = await response.Content.ReadAsStringAsync();
-            errorMessage = $"Erro ao excluir funcionário: {error}";
+            errorMessage = $"Error deleting employee: {error}";
         }
     }
 }

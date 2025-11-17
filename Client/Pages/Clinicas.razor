@@ -6,8 +6,8 @@
 @inject IJSRuntime JS
 
 <div class="page-header mb-4">
-    <h3>🏥 Gerenciar Clínicas</h3>
-    <p class="text-muted">Controle centralizado de estoque e distribuição de materiais</p>
+    <h3>🏥 Manage Clinics</h3>
+    <p class="text-muted">Centralized control of inventory and material distribution</p>
 </div>
 
 @if (!string.IsNullOrEmpty(errorMessage))
@@ -17,12 +17,12 @@
 
 @if (clinics == null)
 {
-    <p>Carregando...</p>
+    <p>Loagind...</p>
 }
 else
 {
     <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
-        <span class="fw-semibold">Clínicas:</span>
+        <span class="fw-semibold">Clinics:</span>
         @foreach (var c in clinics)
         {
             <button class="btn @(selectedClinic?.Id == c.Id ? "btn-primary" : "btn-outline-primary")"
@@ -33,26 +33,26 @@ else
     </div>
 
     <p class="text-muted small">
-        Utilize a página <NavLink class="fw-semibold" href="/estoque-geral">Estoque Geral</NavLink> para distribuir materiais entre as clínicas.
+        Use the <NavLink class="fw-semibold" href="/estoque-geral">General Inventory</NavLink> page to distribute materials between clinics.
     </p>
 
     @if (selectedClinic == null)
     {
-        <p class="text-muted">Selecione uma clínica para visualizar estoque, status e movimentações.</p>
+        <p class="text-muted">Select a clinic to view inventory, status, and movements.</p>
     }
     else
     {
         <section class="mt-4">
-            <h4>Estoque de @selectedClinic.Name</h4>
+            <h4>Inventory of @selectedClinic.Name</h4>
             @if (clinicDetails == null)
             {
-                <p>Carregando detalhes...</p>
+                <p>Loading details...</p>
             }
             else
             {
-                if (!clinicDetails.Stocks.Any())
+                @if (!clinicDetails.Stocks.Any())
                 {
-                    <p>Esta clínica ainda não possui materiais.</p>
+                    <p>This clinic does not have any materials yet.</p>
                 }
                 else
                 {
@@ -60,21 +60,21 @@ else
                         <thead>
                             <tr>
                                 <th>Material</th>
-                                <th>Categoria</th>
-                                <th>Quantidade</th>
-                                <th class="text-center">Aberto?</th>
-                                <th>Desde</th>
+                                <th>Category</th>
+                                <th>Quantity</th>
+                                <th class="text-center">Open?</th>
+                                <th>Since</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var s in clinicDetails.Stocks)
                             {
-                                <tr>
+                                <tr class="@(s.QuantityAvailable == 1 ? "table-danger" : "")">
                                     <td>@s.MaterialName</td>
                                     <td>@s.Category</td>
                                     <td>@s.QuantityAvailable</td>
                                     <td class="text-center">
-                                        @if (s.Category == "MateriaisDeUso" || s.Category == "Descartaveis")
+                                        @if (s.Category == "UsageMaterials" || s.Category == "Disposables")
                                         {
                                             <input type="checkbox" checked="@s.IsOpen" @onchange="(e) => ToggleOpen(s, e)" />
                                         }
@@ -96,19 +96,19 @@ else
                 }
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="mb-0">Últimas Movimentações</h5>
+                    <h5 class="mb-0">Latest Movements</h5>
                     @if (clinicDetails.Movements.Any())
                     {
                         <button class="btn btn-sm btn-outline-danger" 
                                 title="Limpar log de movimentações"
                                 @onclick="ClearMovements">
-                            🗑️ Limpar Log
+                            🗑️ Clear Log
                         </button>
                     }
                 </div>
                 @if (!clinicDetails.Movements.Any())
                 {
-                    <p>Nenhuma movimentação registrada.</p>
+                    <p>No movements recorded.</p>
                 }
                 else
                 {
@@ -151,7 +151,7 @@ else
         clinicDetails = await ClinicService.Get(c.Id);
         if (clinicDetails == null)
         {
-            errorMessage = "Não foi possível carregar os detalhes da clínica selecionada.";
+            errorMessage = "Unable to load details of the selected clinic.";
         }
     }
 
@@ -182,7 +182,7 @@ else
         clinicDetails = await ClinicService.Get(selectedClinic.Id);
         if (clinicDetails == null)
         {
-            errorMessage = "Não foi possível atualizar os dados da clínica.";
+            errorMessage = "Unable to update clinic data.";
         }
     }
 
@@ -192,12 +192,12 @@ else
 
         if (selectedClinic == null)
         {
-            errorMessage = "Selecione uma clínica primeiro.";
+            errorMessage = "Please select a clinic first.";
             return;
         }
 
         var confirmed = await JS.InvokeAsync<bool>("confirm", 
-            "Tem certeza que deseja limpar todo o log de movimentações? Esta ação não pode ser desfeita.");
+            "Are you sure you want to clear the entire movement log ? This action cannot be undone.");
 
         if (!confirmed)
             return;
@@ -207,14 +207,14 @@ else
         if (!response.IsSuccessStatusCode)
         {
             var error = await response.Content.ReadAsStringAsync();
-            errorMessage = $"Erro ao limpar log: {error}";
+            errorMessage = $"Error clearing log: { error}" ;
             return;
         }
 
         clinicDetails = await ClinicService.Get(selectedClinic.Id);
         if (clinicDetails == null)
         {
-            errorMessage = "Não foi possível atualizar os dados da clínica após limpar o log.";
+            errorMessage = "Unable to update clinic data after clearing the log.";
         }
     }
 }

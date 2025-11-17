@@ -25,8 +25,8 @@ public class MaterialsController(AppDbContext db) : ControllerBase
                 .ToListAsync();
 
             var materiaisAbertosStocks = allClinicStocks
-                .Where(cs => cs.Material.Category == Core.Entities.Enums.MaterialCategory.MateriaisDeUso ||
-                            cs.Material.Category == Core.Entities.Enums.MaterialCategory.Descartaveis)
+                .Where(cs => cs.Material.Category == Core.Entities.Enums.MaterialCategory.UsageMaterials ||
+                            cs.Material.Category == Core.Entities.Enums.MaterialCategory.Disposables)
                 .ToList();
 
             var result = materials.Select(m => 
@@ -110,6 +110,7 @@ public class MaterialsController(AppDbContext db) : ControllerBase
                 material.Id,
                 material.Name,
                 material.Category.ToString(),
+                material.Quantity,
                 totalQuantity,
                 clinicsWithMaterial);
         }).ToList();
@@ -143,7 +144,7 @@ public class MaterialsController(AppDbContext db) : ControllerBase
 
     // 🔹 POST /materials
     [HttpPost]
-    [Authorize(Roles = "Master")]
+    [Authorize(Roles = "Master, User")]
     public async Task<IActionResult> Create([FromBody] MaterialCreateRequest dto)
     {
         if (!Enum.TryParse<MaterialCategory>(dto.Category, true, out var parsedCategory))
@@ -183,7 +184,7 @@ public class MaterialsController(AppDbContext db) : ControllerBase
     }
 
     [HttpPost("batch")]
-    [Authorize(Roles = "Master")]
+    [Authorize(Roles = "Master, User")]
     public async Task<IActionResult> CreateBatch([FromBody] MaterialCreateBatchRequest request)
     {
         foreach (var item in request.Materials)

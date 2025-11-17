@@ -1,45 +1,38 @@
+/* Conte�do para Login.razor.css */
+
 .login-container {
+    /* Define a imagem de fundo */
+    background-image: url('/imagens/LogoLogin.jpeg');
+    /* Garante que a imagem cubra todo o cont�iner sem distorcer */
+    background-size: cover;
+    /* Centraliza a imagem */
+    background-position: center;
+    /* Impede que a imagem se repita */
+    background-repeat: no-repeat;
+    /* Garante que o cont�iner ocupe toda a altura da tela */
+    width: 100vw;
+    height: 100vh;
+    /* Usa Flexbox para centralizar o formul�rio de login */
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    width: 100%;
-    background: linear-gradient(135deg, #006B3C 0%, #005A2B 100%);
-    padding: 2rem;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
 }
 
 .login-card {
-    width: 100%;
-    max-width: 420px;
-    padding: 3rem;
-    background: white;
-    border: none;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    animation: slideUp 0.5s ease;
+    /* Adiciona um fundo semi-transparente ou branco para garantir a legibilidade */
+    background-color: rgba(255, 255, 255, 0.95);
+    /* Adiciona um pouco de sombra para destacar */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    /* Define a largura m�xima do cart�o */
+    max-width: 400px;
+    width: 90%;
+    /* Adiciona padding e bordas arredondadas */
+    padding: 30px;
+    border-radius: 10px;
 }
 
-.login-card h3 {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: #2d3748;
-    font-size: 2rem;
-}
-
-.login-card label {
-    font-weight: 600;
-    color: #495057;
-    margin-bottom: 0.5rem;
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
+    .login-card h3 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-

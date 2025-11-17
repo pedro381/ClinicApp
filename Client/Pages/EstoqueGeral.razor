@@ -5,8 +5,8 @@
 @inject MaterialService MaterialService
 
 <div class="page-header mb-4">
-    <h3>📦 Estoque Geral</h3>
-    <p class="text-muted">Soma consolidada dos estoques individuais de cada clínica</p>
+    <h3>📦 General Inventory</h3>
+    <p class="text-muted">Consolidated total of individual inventories from each clinic</p>
 </div>
 
 @if (!string.IsNullOrEmpty(errorMessage))
@@ -16,22 +16,29 @@
 
 @if (materials == null)
 {
-    <p>Carregando...</p>
+    <p>Loading...</p>
 }
 else if (!materials.Any())
 {
-    <p class="text-muted">Nenhum material cadastrado nas clínicas.</p>
+    <p class="text-muted">No materials registered in the clinics.</p>
 }
 else
 {
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-        <span class="text-muted small">
-            Estoque geral = soma das quantidades disponíveis em cada clínica. 
-            Cada clínica movimenta apenas o seu próprio estoque.
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
+        <span class="text-muted small flex-grow-1">
+            - The general inventory represents the aggregated quantity available across all clinics.
+            Each clinic operates independently, managing only its own stock.
         </span>
-        <button class="btn btn-sm btn-outline-primary" @onclick="LoadSummary">
-            Atualizar
-        </button>
+        <div class="d-flex flex-column flex-sm-row gap-2 inventory-actions">
+            <input class="form-control form-control-sm"
+                   type="search"
+                   placeholder="Search material or category"
+                   @bind="searchTerm"
+                   @bind:event="oninput" />
+            <button class="btn btn-sm btn-outline-primary" @onclick="LoadSummary">
+                Refresh
+            </button>
+        </div>
     </div>
 
     <div class="table-responsive">
@@ -39,45 +46,71 @@ else
             <thead>
                 <tr>
                     <th>Material</th>
-                    <th>Categoria</th>
-                    <th class="text-center">Total nas Clínicas</th>
-                    <th>Distribuição por Clínica</th>
+                    <th>Category</th>
+                    <th class="text-center">Total in Warehouse</th>
+                    <th class="text-center">Total in Clinics</th>
+                    <th>Distribution by Clinic</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var material in materials)
+                @{
+                    var filteredMaterials = FilterMaterials().ToList();
+                }
+                @if (!filteredMaterials.Any())
                 {
                     <tr>
-                        <td class="align-middle">@material.Name</td>
-                        <td class="align-middle">@material.Category</td>
-                        <td class="text-center align-middle">
-                            @if (material.TotalQuantity > 0)
-                            {
-                                <strong>@material.TotalQuantity</strong>
-                            }
-                            else
-                            {
-                                <span class="text-muted">0</span>
-                            }
-                        </td>
-                        <td class="align-middle">
-                            @if (material.Clinics.Any())
-                            {
-                                <div class="clinic-badges">
-                                    @foreach (var clinic in material.Clinics)
-                                    {
-                                        <span class="clinic-badge" title="@($"{clinic.ClinicName}: {clinic.Quantity} unidade(s)")">
-                                            @clinic.ClinicName: @clinic.Quantity
-                                        </span>
-                                    }
-                                </div>
-                            }
-                            else
-                            {
-                                <span class="text-muted small">Nenhuma clínica com estoque disponível.</span>
-                            }
+                        <td colspan="5" class="text-center text-muted py-4">
+                            No materials found for "@searchTerm".
                         </td>
                     </tr>
+                }
+                else
+                {
+                    @foreach (var material in filteredMaterials)
+                    {
+                        var isLowStock = material.TotalQuantity < 1;
+                        <tr class="@(isLowStock ? "low-stock" : string.Empty)">
+                            <td class="align-middle">@material.Name</td>
+                            <td class="align-middle">@material.Category</td>
+                            <td class="text-center align-middle">
+                                @if (material.WarehouseQuantity > 0)
+                                {
+                                    <strong>@material.WarehouseQuantity</strong>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">0</span>
+                                }
+                            </td>
+                            <td class="text-center align-middle">
+                                @if (!isLowStock)
+                                {
+                                    <strong>@material.TotalQuantity</strong>
+                                }
+                                else
+                                {
+                                    <span class="low-stock-text">0</span>
+                                }
+                            </td>
+                            <td class="align-middle">
+                                @if (material.Clinics.Any())
+                                {
+                                    <div class="clinic-badges">
+                                        @foreach (var clinic in material.Clinics)
+                                        {
+                                            <span class="clinic-badge" title="@($"{clinic.ClinicName}: {clinic.Quantity} unidade(s)")">
+                                                @clinic.ClinicName: @clinic.Quantity
+                                            </span>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">No clinics have available stock.</span>
+                                }
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
@@ -87,6 +120,7 @@ else
 @code {
     List<MaterialGeneralStockDto>? materials;
     string? errorMessage;
+    string searchTerm = string.Empty;
 
     protected override async Task OnInitializedAsync() => await LoadSummary();
 
@@ -100,9 +134,28 @@ else
         }
         catch (Exception ex)
         {
-            errorMessage = $"Erro ao carregar o estoque geral: {ex.Message}";
+            errorMessage = $"Error loading general inventory: {ex.Message}";
             materials = new();
         }
+    }
+
+    IEnumerable<MaterialGeneralStockDto> FilterMaterials()
+    {
+        if (materials == null || !materials.Any())
+        {
+            return Enumerable.Empty<MaterialGeneralStockDto>();
+        }
+
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            return materials;
+        }
+
+        var normalized = searchTerm.Trim();
+
+        return materials.Where(material =>
+            (!string.IsNullOrWhiteSpace(material.Name) && material.Name.Contains(normalized, StringComparison.OrdinalIgnoreCase)) ||
+            (!string.IsNullOrWhiteSpace(material.Category) && material.Category.Contains(normalized, StringComparison.OrdinalIgnoreCase)));
     }
 }
 
@@ -129,6 +182,19 @@ else
         display: inline-flex;
         align-items: center;
         gap: 0.35rem;
+    }
+
+    .inventory-actions input[type="search"] {
+        min-width: 240px;
+    }
+
+    .low-stock {
+        background-color: #ffd3d6 !important;
+    }
+
+    .low-stock-text {
+        color: #9c1a23;
+        font-weight: 700;
     }
 </style>
 

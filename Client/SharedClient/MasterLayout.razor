@@ -3,7 +3,7 @@
 @inject Client.Services.AuthService AuthService
 
 <div class="p-3 bg-dark text-white">
-    <h3>Área Master</h3>
+    <h3>Master Area</h3>
 </div>
 
 <AuthorizeView Roles="Master">
@@ -12,8 +12,8 @@
             <div class="bg-light p-3" style="width:200px;">
                 <ul>
                     <li><a href="/dashboard">Dashboard</a></li>
-                    <li><a href="/clinicas">Gerenciar Clínicas</a></li>
-                    <li><a href="/materiais">Materiais</a></li>
+                    <li><a href="/clinicas">Manage Clinics</a></li>
+                    <li><a href="/materiais">Materials</a></li>
                 </ul>
 
                 <button @onclick="Logout">Sair</button>
