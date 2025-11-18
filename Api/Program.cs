@@ -76,11 +76,11 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Adiciona o middleware do Swagger em ambiente de desenvolvimento
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseCors("CorsPolicy");
 
