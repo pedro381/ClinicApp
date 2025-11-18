@@ -26,6 +26,9 @@ jobs:
       - name: Publish Api/Api.csproj
         run: dotnet publish Api/Api.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
+      - name: Copy SQLite DB to publish folder
+        run: cp Api/Data/myclinicapp.db ${{env.DOTNET_ROOT}}/myapp/Data/
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
